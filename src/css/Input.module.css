@@ -1,0 +1,47 @@
+.inputGroup {
+  margin-bottom: 18px; /* Thora gap barha diya professional look ke liye */
+  gap: 6px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.required {
+  margin-left: 2px;
+  color: var(--error-color);
+}
+
+.inputField {
+  outline: none;
+  font-size: 16px;
+  padding: 11px 14px;
+  background-color: white;
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.inputField:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.inputError {
+  border-color: var(--error-color) !important;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.errorText {
+  font-size: 12px;
+  margin-top: 2px;
+  color: var(--error-color);
+}

@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  padding: 20px;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  max-width: 500px; /* Thora width barha diya Confirm Pass ke liye */
+  width: 100%;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  color: white;
+  display: flex;
+  font-weight: bold;
+  margin: 0 auto 15px;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: center;
+  background: var(--primary-color);
+}
+
+.nameRow {
+  gap: 15px;
+  width: 100%;
+  display: flex;
+}
+
+/* FIX: Ensure inputs inside nameRow stay inside the card */
+.nameRow > div {
+  min-width: 0; /* Prevents overflow */
+  flex: 1;
+}
+
+.passwordWrapper {
+  width: 100%;
+  position: relative;
+}
+
+.eyeIcon {
+  top: 33px; /* Label ke size ke hisab se adjust karein */
+  right: 12px;
+  z-index: 10;
+  border: none;
+  padding: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  background: none;
+  font-weight: 700;
+  position: absolute;
+  color: var(--primary-color);
+}
+
+.footerText {
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.footerText a {
+  font-weight: 600;
+  margin-left: 5px;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+@media (max-width: 600px) {
+  .card {
+    border: none;
+    padding: 20px;
+    box-shadow: none;
+  }
+
+  .nameRow {
+    gap: 0;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,63 @@
+.btn {
+  display: flex;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 20px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+}
+
+.primary {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+.primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.outline {
+  color: var(--text-main);
+  background-color: transparent;
+  border-color: var(--border-color);
+}
+
+.outline:hover {
+  background-color: var(--bg-color);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.loaderContainer {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Chota sa spinner jo loading par dikhay ga */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
