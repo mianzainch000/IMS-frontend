@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "formate": "node script/formate.js",
-    "reset-git": "powershell -Command \"Remove-Item -Recurse -Force .git; git init; git add .; git commit -m 'Initial commit'; git remote add origin https://github.com/mianzainch000/mrt-frontend.git; git branch -M master; git push -u origin master --force\""
+    "formate": "node script/formate.js"
   },
   "dependencies": {
     "axios": "^1.13.5",
