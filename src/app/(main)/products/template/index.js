@@ -104,30 +104,31 @@ const ProductsPage = () => {
                         {products.length > 0 ? (
                             products.map((p) => (
                                 <tr key={p._id}>
-                                    <td className={styles.productCell}>{p.name}</td>
-                                    <td>{p.sku}</td>
-                                    <td><span className={styles.catBadge}>{p.category}</span></td>
-                                    <td>${p.price}</td>
-                                    <td>
+                                    <td data-label="Product Name">{p.name}</td>
+                                    <td data-label="SKU">{p.sku}</td>
+                                    <td data-label="Category">
+                                        <span className={styles.catBadge}>{p.category}</span>
+                                    </td>
+                                    <td data-label="Price">${p.price}</td>
+                                    <td data-label="Stock">
                                         <span className={p.stock < 20 ? styles.lowStock : ""}>
                                             {p.stock} pcs
                                         </span>
                                     </td>
-                                    <td>
-                                        <div className={styles.actionGroup}>
-                                            <button
-                                                className={styles.editBtn}
-                                                onClick={() => handleEditClick(p)}
-                                            >
-                                                <Icons.Edit />
-                                            </button>
-                                            <button
-                                                className={styles.deleteBtn}
-                                                onClick={() => handleDelete(p._id)}
-                                            >
-                                                <Icons.Delete />
-                                            </button>
-                                        </div>
+                                    <td data-label="Actions">                                        <div className={styles.actionGroup}>
+                                        <button
+                                            className={styles.editBtn}
+                                            onClick={() => handleEditClick(p)}
+                                        >
+                                            <Icons.Edit />
+                                        </button>
+                                        <button
+                                            className={styles.deleteBtn}
+                                            onClick={() => handleDelete(p._id)}
+                                        >
+                                            <Icons.Delete />
+                                        </button>
+                                    </div>
                                     </td>
                                 </tr>
                             ))

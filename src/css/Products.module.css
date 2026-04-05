@@ -2,12 +2,16 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
 }
 
+/* Header */
 .pageHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .pageHeader h1 {
@@ -21,11 +25,12 @@
   font-size: 14px;
 }
 
+/* Button */
 .addBtn {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -39,16 +44,19 @@
   opacity: 0.9;
 }
 
+/* Table Wrapper (IMPORTANT) */
 .tableCard {
   background-color: var(--card-bg);
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  overflow: hidden;
+  overflow-x: auto; /* 🔥 horizontal scroll */
 }
 
+/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 700px; /* 🔥 prevent squishing */
 }
 
 .table th {
@@ -89,6 +97,7 @@
   gap: 10px;
 }
 
+/* Buttons */
 .editBtn,
 .deleteBtn {
   background: none;
@@ -110,4 +119,53 @@
 .deleteBtn:hover {
   border-color: var(--error-color);
   color: var(--error-color);
+}
+
+/* ---------------- MOBILE VIEW ---------------- */
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .addBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Convert table into cards */
+  .table {
+    min-width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    display: block;
+    background: var(--card-bg);
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none;
+    font-size: 13px;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .actionGroup {
+    justify-content: flex-end;
+  }
 }
