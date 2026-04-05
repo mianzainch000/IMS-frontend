@@ -1,9 +1,13 @@
 "use client";
-import { useState } from "react"; // 1. State add ki
+import { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "@/css/Products.module.css";
-import ProductModal from "@/components/ProductModal"; // 2. Modal import kiya
+import ProductModal from "@/components/ProductModal";
+import Loader from "@/components/Loader"; // Loader import kiya
+import { useSnackbar } from "@/components/Snackbar";
+import handleAxiosError from "@/components/HandleAxiosError";
 
-// SVG Icons for Actions
+// Icons Object
 const Icons = {
     Plus: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
     Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>,
@@ -11,35 +15,79 @@ const Icons = {
 };
 
 const ProductsPage = () => {
-    // Modal state
+    const showSnackbar = useSnackbar();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false); // Loader state
+    const [productToEdit, setProductToEdit] = useState(null);
 
-    // Static Data
-    const products = [
-        { id: 1, name: "Wireless Mouse", sku: "MS-001", category: "Electronics", price: "$25.00", stock: 150 },
-        { id: 2, name: "HD Monitor", sku: "MN-042", category: "Electronics", price: "$180.00", stock: 12 },
-        { id: 3, name: "Office Desk", sku: "FN-992", category: "Furniture", price: "$120.00", stock: 5 },
-    ];
+    // --- 1. Load Data (GET) ---
+    const loadProducts = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get("/products/api");
+            setProducts(res.data);
+        } catch (error) {
+            const { message } = handleAxiosError(error);
+            showSnackbar({ message, type: "error" });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadProducts();
+    }, []);
+
+    // --- 2. Delete Logic ---
+    const handleDelete = async (id) => {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        setLoading(true);
+        try {
+            await axios.delete(`/products/api/${id}`);
+            showSnackbar({ message: "Product deleted!", type: "success" });
+            loadProducts(); // Refresh Table
+        } catch (error) {
+            const { message } = handleAxiosError(error);
+            showSnackbar({ message, type: "error" });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // --- 3. Edit Handler ---
+    const handleEditClick = (product) => {
+        setProductToEdit(product);
+        setIsModalOpen(true);
+    };
 
     return (
         <div className={styles.container}>
-            {/* Modal Component yahan rakha hai */}
-            <ProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            {/* Global Loader */}
+            {loading && <Loader />}
 
-            {/* Top Header */}
+            <ProductModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setProductToEdit(null);
+                }}
+                refreshData={loadProducts}
+                productToEdit={productToEdit}
+            />
+
             <div className={styles.pageHeader}>
                 <div>
                     <h1>Products</h1>
                     <p>Manage your inventory and stock levels.</p>
                 </div>
-                {/* Button par onClick handler lagaya */}
                 <button className={styles.addBtn} onClick={() => setIsModalOpen(true)}>
                     <Icons.Plus />
                     <span>Add Product</span>
                 </button>
             </div>
 
-            {/* Table Section */}
             <div className={styles.tableCard}>
                 <table className={styles.table}>
                     <thead>
@@ -53,25 +101,45 @@ const ProductsPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((p) => (
-                            <tr key={p.id}>
-                                <td className={styles.productCell}>{p.name}</td>
-                                <td>{p.sku}</td>
-                                <td><span className={styles.catBadge}>{p.category}</span></td>
-                                <td>{p.price}</td>
-                                <td>
-                                    <span className={p.stock < 20 ? styles.lowStock : ""}>
-                                        {p.stock} pcs
-                                    </span>
-                                </td>
-                                <td>
-                                    <div className={styles.actionGroup}>
-                                        <button className={styles.editBtn} title="Edit"><Icons.Edit /></button>
-                                        <button className={styles.deleteBtn} title="Delete"><Icons.Delete /></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        {products.length > 0 ? (
+                            products.map((p) => (
+                                <tr key={p._id}>
+                                    <td className={styles.productCell}>{p.name}</td>
+                                    <td>{p.sku}</td>
+                                    <td><span className={styles.catBadge}>{p.category}</span></td>
+                                    <td>${p.price}</td>
+                                    <td>
+                                        <span className={p.stock < 20 ? styles.lowStock : ""}>
+                                            {p.stock} pcs
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div className={styles.actionGroup}>
+                                            <button
+                                                className={styles.editBtn}
+                                                onClick={() => handleEditClick(p)}
+                                            >
+                                                <Icons.Edit />
+                                            </button>
+                                            <button
+                                                className={styles.deleteBtn}
+                                                onClick={() => handleDelete(p._id)}
+                                            >
+                                                <Icons.Delete />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            !loading && (
+                                <tr>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
+                                        No products found.
+                                    </td>
+                                </tr>
+                            )
+                        )}
                     </tbody>
                 </table>
             </div>

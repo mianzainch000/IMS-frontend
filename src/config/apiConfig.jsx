@@ -4,4 +4,8 @@ export const apiConfig = {
   login: "login",
   forgotPassword: "forgotPassword",
   resetPassword: "resetPassword",
+  addProduct: "addProduct",
+  getProduct: "getProduct",
+  updateProduct: "updateProduct",
+  deleteProduct: "deleteProduct",
 };
