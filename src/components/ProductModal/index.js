@@ -9,25 +9,43 @@ import axios from "axios";
 const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
     const showAlert = useSnackbar();
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]); // Dynamic categories state
 
-    // Initial state for the form
     const initialState = {
         name: "",
         sku: "",
-        category: "Electronics",
+        category: "", // Initial empty, niche useEffect mein set hoga
         price: "",
         stock: ""
     };
 
     const [formData, setFormData] = useState(initialState);
 
-    // Sync form with productToEdit or reset on open
+    // 1. Categories load karne ka function
+    const loadCategories = async () => {
+        try {
+            const res = await axios.get("/categories/api");
+            setCategories(res.data);
+
+            // Agar naya product hai, toh pehli category default set kar dein
+            if (!productToEdit && res.data.length > 0) {
+                setFormData(prev => ({ ...prev, category: res.data[0].name }));
+            }
+        } catch (error) {
+            console.error("Error loading categories:", error);
+        }
+    };
+
     useEffect(() => {
+        if (isOpen) {
+            loadCategories(); // Modal khulne par categories refresh hongi
+        }
+
         if (productToEdit) {
             setFormData({
                 name: productToEdit.name || "",
                 sku: productToEdit.sku || "",
-                category: productToEdit.category || "Electronics",
+                category: productToEdit.category || "",
                 price: productToEdit.price || "",
                 stock: productToEdit.stock || ""
             });
@@ -45,8 +63,9 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        if (!formData.category) return showAlert({ message: "Please select a category", type: "error" });
 
+        setLoading(true);
         try {
             const url = productToEdit
                 ? `/products/api/${productToEdit._id}`
@@ -55,19 +74,18 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
             const method = productToEdit ? "put" : "post";
             const res = await axios[method](url, formData);
 
-            // MASLA YAHAN THA: res === 201 nahi, res.status === 201 ya 200 hoga
             if (res.status === 201 || res.status === 200) {
                 showAlert({
                     message: res.data.message || "Operation successful!", type: "success"
                 });
-                refreshData(); // Table refresh hoga
-                onClose(); // Modal band hoga
+                refreshData();
+                onClose();
             }
         } catch (error) {
             const { message } = handleAxiosError(error);
             showAlert({ message: message || "Something went wrong!", type: "error" });
         } finally {
-            setLoading(false); // Loader yahan stop hoga
+            setLoading(false);
         }
     };
 
@@ -120,26 +138,35 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                             className={styles.select}
                             value={formData.category}
                             onChange={handleChange}
+                            required
                         >
-                            <option value="Electronics">Electronics</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Accessories">Accessories</option>
+                            <option value="" disabled>Select a category</option>
+                            {/* 2. Categories ko dynamic map kiya yahan */}
+                            {categories.map((cat) => (
+                                <option key={cat._id} value={cat.name}>
+                                    {cat.name}
+                                </option>
+                            ))}
                         </select>
+                        {categories.length === 0 && (
+                            <small style={{ color: 'var(--error-color)', fontSize: '11px' }}>
+                                No categories found. Please add one first.
+                            </small>
+                        )}
                     </div>
 
-                    <div style={{ display: 'flex', gap: '12px' }}>
-                        <div className={styles.formGroup} style={{ flex: 1 }}>
-                            <label>Price</label>
-                            <input
-                                name="price"
-                                type="number"
-                                className={styles.input}
-                                placeholder="0.00"
-                                value={formData.price}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                    <div className={styles.row}>                        <div className={styles.formGroup} style={{ flex: 1 }}>
+                        <label>Price</label>
+                        <input
+                            name="price"
+                            type="number"
+                            className={styles.input}
+                            placeholder="0.00"
+                            value={formData.price}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                         <div className={styles.formGroup} style={{ flex: 1 }}>
                             <label>Stock</label>
                             <input
@@ -156,7 +183,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
                     <div className={styles.modalFooter}>
                         <button type="button" className={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                        <button type="submit" className={styles.saveBtn} disabled={loading}>
+                        <button type="submit" className={styles.saveBtn} disabled={loading || categories.length === 0}>
                             {loading ? "Saving..." : productToEdit ? "Update Changes" : "Save Product"}
                         </button>
                     </div>

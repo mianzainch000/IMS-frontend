@@ -1,36 +1,46 @@
+/* ================= CONTAINER ================= */
 .container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
+/* ================= HEADER ================= */
 .header h1 {
-  font-size: 24px;
+  font-size: clamp(20px, 5vw, 28px);
   color: var(--text-main);
+  margin-bottom: 4px;
 }
+
 .header p {
   color: var(--text-muted);
   font-size: 14px;
 }
 
+/* ================= GRID ================= */
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: 24px;
+  align-items: start;
 }
 
+/* ================= CARDS ================= */
 .formCard,
 .listCard {
   background: var(--card-bg);
-  padding: 24px;
+  padding: clamp(16px, 4vw, 24px);
   border-radius: 12px;
   border: 1px solid var(--border-color);
 }
 
-.formCard h3,
-.listCard h3 {
-  margin-bottom: 20px;
-  font-size: 18px;
+/* ================= FORM ================= */
+.form {
+  display: flex;
+  flex-direction: column;
 }
 
 .inputGroup {
@@ -39,55 +49,193 @@
   gap: 8px;
   margin-bottom: 16px;
 }
+
+.inputGroup label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .inputGroup input {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background: var(--bg-color);
   color: var(--text-main);
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
 }
 
+.inputGroup input:focus {
+  border-color: var(--primary-color);
+}
+
+/* ================= BUTTONS ================= */
 .addBtn {
   width: 100%;
   padding: 12px;
   background: var(--primary-color);
   color: white;
-  border: none;
   border-radius: 8px;
+  border: none;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.2s;
 }
 
+.addBtn:hover {
+  opacity: 0.9;
+}
+
+.cancelBtn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  margin-top: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+/* ================= LIST ================= */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* LIST ITEM */
 .listItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+/* CATEGORY INFO */
+.catInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .catName {
-  display: block;
   font-weight: 600;
   color: var(--text-main);
+  font-size: 15px;
 }
+
 .catCount {
   font-size: 12px;
   color: var(--text-muted);
 }
 
+/* ================= ACTIONS ================= */
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0; /* prevent breaking */
+}
+
+.editBtn,
+.deleteBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* prevent wrap */
+  transition: all 0.2s;
+}
+
+/* Edit */
+.editBtn {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.editBtn:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Delete */
 .deleteBtn {
   background: transparent;
   color: var(--error-color);
   border: 1px solid var(--error-color);
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
 }
 
-@media (max-width: 900px) {
+.deleteBtn:hover {
+  background: var(--error-color);
+  color: white;
+}
+
+/* ================= EMPTY ================= */
+.emptyMsg {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
   .contentGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  /* Stack list item */
+  .listItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ================= SMALL MOBILE ================= */
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .editBtn,
+  .deleteBtn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .catName {
+    font-size: 14px;
+  }
+
+  .catCount {
+    font-size: 11px;
   }
 }

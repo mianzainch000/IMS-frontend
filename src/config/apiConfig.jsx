@@ -8,4 +8,8 @@ export const apiConfig = {
   getProduct: "getProduct",
   updateProduct: "updateProduct",
   deleteProduct: "deleteProduct",
+  addCategory: "addCategory",
+  getCategory: "getCategory",
+  updateCategory: "updateCategory",
+  deleteCategory: "deleteCategory",
 };
