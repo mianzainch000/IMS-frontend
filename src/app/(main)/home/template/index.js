@@ -6,6 +6,7 @@ import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
 
+// --- Dashboard Icons ---
 const StatIcons = {
     Box: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>,
     Alert: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>,
@@ -19,6 +20,7 @@ const HomePage = () => {
     const [dashboardData, setDashboardData] = useState({
         totalProducts: 0,
         lowStockCount: 0,
+        lowStockItems: [],
         totalCategories: 0,
         recentUpdates: []
     });
@@ -32,24 +34,28 @@ const HomePage = () => {
             ]);
 
             const products = prodRes.data;
-            // PROFESSIONAL LOGIC: Alert only for 5 or less items
-            const lowStockItems = products.filter(p => p.stock > 0 && p.stock <= 5);
+            // PROFESSIONAL LOGIC: Alert trigger at 5 items or less
+            const alerts = products.filter(p => p.stock > 0 && p.stock <= 5);
             const recent = [...products].reverse().slice(0, 5);
 
             setDashboardData({
                 totalProducts: products.length,
-                lowStockCount: lowStockItems.length,
+                lowStockCount: alerts.length,
+                lowStockItems: alerts,
                 totalCategories: catRes.data.length,
                 recentUpdates: recent
             });
         } catch (error) {
-            showSnackbar({ message: handleAxiosError(error).message, type: "error" });
+            const { message } = handleAxiosError(error);
+            showSnackbar({ message, type: "error" });
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => { loadDashboardData(); }, []);
+    useEffect(() => {
+        loadDashboardData();
+    }, []);
 
     const stats = [
         { title: "Total Products", value: dashboardData.totalProducts, icon: <StatIcons.Box />, color: "#2563eb" },
@@ -61,15 +67,45 @@ const HomePage = () => {
     return (
         <div className={styles.dashboardContainer}>
             {loading && <Loader />}
+
             <div className={styles.welcomeSection}>
                 <h1>Dashboard Overview</h1>
+                <p>Welcome back! Here&apos;s your live inventory status.</p>
             </div>
+
+            {/* Notification Section: Only shows if lowStockItems exists */}
+            {dashboardData.lowStockItems.length > 0 && (
+                <div className={styles.notificationArea}>
+                    <div className={styles.alertHeader}>
+                        <StatIcons.Alert />
+                        <span>Inventory Alerts ({dashboardData.lowStockCount})</span>
+                    </div>
+                    <div className={styles.alertList}>
+                        {dashboardData.lowStockItems.map((item) => (
+                            <div key={item._id} className={styles.alertItem}>
+                                <p>
+                                    <strong>{item.name}</strong> is running low!
+                                    Only <span>{item.stock}</span> left in stock.
+                                </p>
+                                <button onClick={() => window.location.href = '/products'}>
+                                    Restock Now
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className={styles.statsGrid}>
                 {stats.map((item, index) => (
                     <div key={index} className={styles.card}>
-                        <div className={styles.cardIcon} style={{ backgroundColor: `${item.color}15`, color: item.color }}>{item.icon}</div>
-                        <div className={styles.cardInfo}><h3>{item.title}</h3><p>{item.value}</p></div>
+                        <div className={styles.cardIcon} style={{ backgroundColor: `${item.color}15`, color: item.color }}>
+                            {item.icon}
+                        </div>
+                        <div className={styles.cardInfo}>
+                            <h3>{item.title}</h3>
+                            <p>{item.value}</p>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -77,27 +113,50 @@ const HomePage = () => {
             <div className={styles.recentSection}>
                 <div className={styles.tableHeader}>
                     <h2>Recent Inventory Updates</h2>
-                    <button className={styles.viewAllBtn} onClick={() => window.location.href = '/products'}>View All</button>
+                    <button className={styles.viewAllBtn} onClick={() => window.location.href = '/products'}>
+                        View All
+                    </button>
                 </div>
-                <table className={styles.table}>
-                    <thead><tr><th>Product Name</th><th>Category</th><th>Quantity</th><th>Status</th></tr></thead>
-                    <tbody>
-                        {dashboardData.recentUpdates.length > 0 ? (
-                            dashboardData.recentUpdates.map((p) => (
-                                <tr key={p._id}>
-                                    <td>{p.name}</td><td>{p.category}</td><td>{p.stock} pcs</td>
-                                    <td>
-                                        <span className={`${styles.statusBadge} ${p.stock > 5 ? styles.inStock : p.stock > 0 ? styles.lowStock : styles.outOfStock}`}>
-                                            {p.stock > 5 ? "In Stock" : p.stock > 0 ? "Low Stock" : "Out of Stock"}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>No products found.</td></tr>
-                        )}
-                    </tbody>
-                </table>
+
+                <div className={styles.tableWrapper}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dashboardData.recentUpdates.length > 0 ? (
+                                dashboardData.recentUpdates.map((product) => (
+                                    <tr key={product._id}>
+                                        <td className={styles.productName}>{product.name}</td>
+                                        <td>{product.category}</td>
+                                        <td>{product.stock} pcs</td>
+                                        <td>
+                                            <span className={`${styles.statusBadge} ${product.stock > 5 ? styles.inStock :
+                                                    product.stock > 0 ? styles.lowStock : styles.outOfStock
+                                                }`}>
+                                                {product.stock > 5 ? "In Stock" :
+                                                    product.stock > 0 ? "Low Stock" : "Out of Stock"}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                !loading && (
+                                    <tr>
+                                        <td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>
+                                            No products found.
+                                        </td>
+                                    </tr>
+                                )
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
