@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "@/css/Products.module.css";
 import ProductModal from "@/components/ProductModal";
-import Loader from "@/components/Loader"; // Loader import kiya
+import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
+import ConfirmModal from "@/components/ConfirmModal"; // ConfirmModal import kiya
 
 // Icons Object
 const Icons = {
@@ -18,8 +19,12 @@ const ProductsPage = () => {
     const showSnackbar = useSnackbar();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false); // Loader state
+    const [loading, setLoading] = useState(false);
     const [productToEdit, setProductToEdit] = useState(null);
+
+    // --- Confirm Modal States ---
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [productIdToDelete, setProductIdToDelete] = useState(null);
 
     // --- 1. Load Data (GET) ---
     const loadProducts = async () => {
@@ -39,20 +44,30 @@ const ProductsPage = () => {
         loadProducts();
     }, []);
 
-    // --- 2. Delete Logic ---
-    const handleDelete = async (id) => {
-        if (!confirm("Are you sure you want to delete this product?")) return;
+    // --- 2. Delete Flow ---
+
+    // Sirf Modal open karne ke liye
+    const handleDeleteClick = (id) => {
+        setProductIdToDelete(id);
+        setIsConfirmOpen(true);
+    };
+
+    // Asli logic jo Modal ke Confirm button par chalegi
+    const handleConfirmDelete = async () => {
+        if (!productIdToDelete) return;
 
         setLoading(true);
         try {
-            await axios.delete(`/products/api/${id}`);
+            await axios.delete(`/products/api/${productIdToDelete}`);
             showSnackbar({ message: "Product deleted!", type: "success" });
-            loadProducts(); // Refresh Table
+            loadProducts(); // Table Refresh
         } catch (error) {
             const { message } = handleAxiosError(error);
             showSnackbar({ message, type: "error" });
         } finally {
             setLoading(false);
+            setProductIdToDelete(null);
+            setIsConfirmOpen(false);
         }
     };
 
@@ -64,8 +79,17 @@ const ProductsPage = () => {
 
     return (
         <div className={styles.container}>
-            {/* Global Loader */}
             {loading && <Loader />}
+
+            {/* Custom Confirm Modal Integration */}
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Product"
+                message="Are you sure you want to delete this product? This action cannot be undone."
+                type="danger"
+            />
 
             <ProductModal
                 isOpen={isModalOpen}
@@ -115,20 +139,21 @@ const ProductsPage = () => {
                                             {p.stock} pcs
                                         </span>
                                     </td>
-                                    <td data-label="Actions">                                        <div className={styles.actionGroup}>
-                                        <button
-                                            className={styles.editBtn}
-                                            onClick={() => handleEditClick(p)}
-                                        >
-                                            <Icons.Edit />
-                                        </button>
-                                        <button
-                                            className={styles.deleteBtn}
-                                            onClick={() => handleDelete(p._id)}
-                                        >
-                                            <Icons.Delete />
-                                        </button>
-                                    </div>
+                                    <td data-label="Actions">
+                                        <div className={styles.actionGroup}>
+                                            <button
+                                                className={styles.editBtn}
+                                                onClick={() => handleEditClick(p)}
+                                            >
+                                                <Icons.Edit />
+                                            </button>
+                                            <button
+                                                className={styles.deleteBtn}
+                                                onClick={() => handleDeleteClick(p._id)}
+                                            >
+                                                <Icons.Delete />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))
