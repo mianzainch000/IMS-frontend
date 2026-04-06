@@ -1,13 +1,15 @@
 "use client";
-import { useState, useEffect, useMemo } from "react"; // useMemo add kiya
-import { useSearchParams } from "next/navigation"; // Search query pakadne ke liye
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import styles from "@/css/Home.module.css";
 import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
+import { deleteCookie } from "cookies-next";
 
+// --- Icons Component ---
 const StatIcons = {
     Box: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>,
     Alert: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>,
@@ -17,8 +19,7 @@ const StatIcons = {
 
 const HomePage = () => {
     const showSnackbar = useSnackbar();
-
-    // URL se search query ("q") uthana
+    const router = useRouter();
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get("q")?.toLowerCase() || "";
 
@@ -28,45 +29,70 @@ const HomePage = () => {
         lowStockCount: 0,
         lowStockItems: [],
         totalCategories: 0,
+        totalUsers: 0, // ✅ Dynamic Users State
         recentUpdates: []
     });
 
+    // --- Logout Helper (For Inactive Status) ---
+    const handleAutoLogout = () => {
+        deleteCookie("sessionToken", { path: "/" });
+        document.cookie = "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/";
+    };
+
+    // --- Load All Dashboard Data ---
     const loadDashboardData = async () => {
         setLoading(true);
         try {
-            const [prodRes, catRes] = await Promise.all([
+            // ✅ Parallel API calls for Products, Categories, and Users
+            const [prodRes, catRes, userRes] = await Promise.all([
                 axios.get("/products/api"),
-                axios.get("/categories/api")
+                axios.get("/categories/api"),
+                axios.get("/users/api")
             ]);
+
             const products = prodRes.data;
+            const categories = catRes.data;
+            const usersList = userRes.data;
+
+            // Logic for Dashboard logic
             const alerts = products.filter(p => p.stock > 0 && p.stock <= 5);
             const recent = [...products].reverse().slice(0, 5);
-
-            // Sync Header Bell
-            const event = new CustomEvent("updateCartBadge", { detail: alerts.length });
-            window.dispatchEvent(event);
+            const activeUsersCount = usersList.filter(u => u.status === "Active").length;
 
             setDashboardData({
                 totalProducts: products.length,
                 lowStockCount: alerts.length,
                 lowStockItems: alerts,
-                totalCategories: catRes.data.length,
+                totalCategories: categories.length,
+                totalUsers: activeUsersCount, // ✅ Set Dynamic Count
                 recentUpdates: recent
             });
+
+            // Update Notification Bell Badge in Header
+            const event = new CustomEvent("updateCartBadge", { detail: alerts.length });
+            window.dispatchEvent(event);
+
         } catch (error) {
-            const { message } = handleAxiosError(error);
-            showSnackbar({ message, type: "error" });
-        } finally { setLoading(false); }
+            // ✅ If user becomes Inactive while on Dashboard
+            if (error.response?.status === 403) {
+                handleAutoLogout();
+            } else {
+                const { message } = handleAxiosError(error);
+                showSnackbar({ message, type: "error" });
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
-    useEffect(() => { loadDashboardData(); }, []);
+    useEffect(() => {
+        loadDashboardData();
+    }, []);
 
-    // --- SEARCH FILTER LOGIC ---
-    // In-memory filter jo sirf dikhne wali items par kaam karega
-    // Dashboard par Recent Updates aur Alerts ke liye
+    // --- Search Filter Logic ---
     const filteredRecentUpdates = useMemo(() => {
         return dashboardData.recentUpdates.filter(p =>
-            // startsWith check karega ke kya naam search query se shuru hota hai
             p.name.toLowerCase().startsWith(searchQuery) ||
             p.category.toLowerCase().startsWith(searchQuery)
         );
@@ -77,11 +103,13 @@ const HomePage = () => {
             p.name.toLowerCase().startsWith(searchQuery)
         );
     }, [dashboardData.lowStockItems, searchQuery]);
+
+    // --- Stats Configuration ---
     const stats = [
         { title: "Total Products", value: dashboardData.totalProducts, icon: <StatIcons.Box />, color: "#2563eb" },
         { title: "Low Stock Alert", value: dashboardData.lowStockCount, icon: <StatIcons.Alert />, color: "#ef4444" },
         { title: "Total Categories", value: dashboardData.totalCategories, icon: <StatIcons.Layers />, color: "#10b981" },
-        { title: "Users Active", value: "1", icon: <StatIcons.Users />, color: "#f59e0b" },
+        { title: "Users Active", value: dashboardData.totalUsers, icon: <StatIcons.Users />, color: "#f59e0b" },
     ];
 
     return (
@@ -110,15 +138,14 @@ const HomePage = () => {
                                     <strong>{item.name}</strong>
                                     <span>is low: {item.stock} left</span>
                                 </p>
-                                <Link href="/products" className={styles.restockBtn}>
-                                    Restock
-                                </Link>
+                                <Link href="/products" className={styles.restockBtn}>Restock</Link>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
 
+            {/* Stats Cards Grid */}
             <div className={styles.statsGrid}>
                 {stats.map((item, index) => (
                     <div key={index} className={styles.card}>
@@ -133,6 +160,7 @@ const HomePage = () => {
                 ))}
             </div>
 
+            {/* Recent Updates Table */}
             <div className={styles.recentSection}>
                 <div className={styles.tableHeader}>
                     <h2>Recent Updates</h2>
