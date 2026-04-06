@@ -75,7 +75,8 @@ const UsersPage = () => {
             if (res.status === 200) {
                 showSnackbar({
                     message: res.data?.message || "Updated successfully!",
-                    type: "success"
+                    type: "success",
+                    duration: 1000
                 });
                 loadUsers(); // Data refresh karne ke liye
             } else {
