@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { deleteCookie } from "cookies-next";
 import styles from "@/css/Sidebar.module.css";
+import ConfirmModal from "@/components/ConfirmModal";
+import { useSnackbar } from "@/components/Snackbar";
+import { useRouter } from "next/navigation";
+
+
+// Path check karlein
 
 // SVG Icons as reusable components
 const Icons = {
@@ -15,6 +23,9 @@ const Icons = {
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const showAlert = useSnackbar();
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const menuItems = [
     { name: "Dashboard", icon: <Icons.Dashboard />, path: "/home" },
@@ -24,31 +35,50 @@ const Sidebar = () => {
     { name: "Settings", icon: <Icons.Settings />, path: "/settings" },
   ];
 
+  const handleLogout = () => {
+    deleteCookie("sessionToken");
+    router.push("/");
+    showAlert({ message: "✅ Logout successful", type: "success" });
+  };
+
   return (
-    <aside className={styles.sidebar}>
-      <div className={styles.sidebarHeader}>
-        <div className={styles.logo}>IMS</div>
-      </div>
+    <>
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+          <div className={styles.logo}>IMS</div>
+        </div>
 
-      <nav className={styles.nav}>
-        {menuItems.map((item) => {
-          const isActive = pathname === item.path;
-          return (
-            <Link key={item.path} href={item.path} className={`${styles.navLink} ${isActive ? styles.active : ""}`}>
-              <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.linkText}>{item.name}</span>
-            </Link>
-          );
-        })}
-      </nav>
+        <nav className={styles.nav}>
+          {menuItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <Link key={item.path} href={item.path} className={`${styles.navLink} ${isActive ? styles.active : ""}`}>
+                <span className={styles.icon}>{item.icon}</span>
+                <span className={styles.linkText}>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-      <div className={styles.sidebarFooter}>
-        <button className={styles.logoutBtn}>
-          <Icons.Logout />
-          <span>Sign Out</span>
-        </button>
-      </div>
-    </aside>
+        <div className={styles.sidebarFooter}>
+          <button className={styles.logoutBtn} onClick={() => setIsModalOpen(true)}>
+            {/* Ye span aur icon class wahi honi chahiye jo baqi icons ki hai */}
+            <span className={styles.icon}><Icons.Logout /></span>
+            <span className={styles.linkText}>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Modal aside ke bahar hai taake layout na tute */}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleLogout}
+        title="Sign Out"
+        message="Are you sure you want to sign out from the system?"
+        type="primary"
+      />
+    </>
   );
 };
 

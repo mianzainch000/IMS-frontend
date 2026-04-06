@@ -2,27 +2,18 @@
 import { useAuth } from "@/hooks/useAuth";
 
 const PermissionWrapper = ({ children, allowedRoles }) => {
-    const { role } = useAuth(); // Yahan se role aa raha hai
+    const { role, user } = useAuth();
 
-    // --- DEBUGGING LOGS ---
-    console.log("----------------------------------");
-    console.log("Logged-in Role:", `"${role}"`);
-    console.log("Allowed Roles for this component:", allowedRoles);
+    // Agar user logged in nahi hai, toh kuch nahi dikhana
+    if (!user) return null;
 
-    // Strict comparison
+    // Strict check: Role ko lowercase aur trim karke match karein
     const isAllowed = allowedRoles.some(
         (r) => r.toLowerCase().trim() === role.toLowerCase().trim()
     );
 
-    console.log("Result (Is Allowed?):", isAllowed);
-    console.log("----------------------------------");
-    // ----------------------
-
-    if (isAllowed) {
-        return <>{children}</>;
-    }
-
-    return null;
+    // Agar allowed hai toh children (buttons) dikhayen, warna null
+    return isAllowed ? <>{children}</> : null;
 };
 
 export default PermissionWrapper;

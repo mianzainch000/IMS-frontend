@@ -54,7 +54,7 @@
 }
 
 .navLink.active {
-  background-color: rgba(37, 99, 235, 0.1); /* Primary color with low opacity */
+  background-color: rgba(37, 99, 235, 0.1);
   color: var(--primary-color);
   font-weight: 600;
 }
@@ -63,8 +63,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* SVG color inherits from text color */
   color: inherit;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0; /* Icon chota na ho */
 }
 
 .linkText {
@@ -103,21 +105,49 @@
     width: 80px;
   }
 
-  .linkText,
-  .logo {
-    display: none;
+  .logo,
+  .linkText {
+    display: none !important; /* Text ko mobile par bilkul hide rakhein */
   }
 
   .sidebarHeader {
     justify-content: center;
+    padding: 25px 0;
   }
 
+  .nav {
+    padding: 10px 8px;
+  }
+
+  /* Nav Links ko center karein */
   .navLink {
     justify-content: center;
-    padding: 15px;
+    padding: 15px 0;
+    gap: 0;
   }
 
+  /* Logout button ko center karein */
   .logoutBtn {
     justify-content: center;
+    padding: 15px 0;
+    gap: 0;
+  }
+
+  /* Ensure icons are visible and centered */
+  .icon {
+    margin: 0;
+    width: 24px; /* Mobile par icon thora wazay dikhe */
+    height: 24px;
+  }
+
+  .sidebarFooter {
+    padding: 15px 8px;
+  }
+}
+
+/* Extra small mobile fix */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 70px;
   }
 }
