@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-const publicPages = ["/", "/signup", "/login"];
-const protectedPages = ["/home"];
+const publicPages = ["/", "/signup", "/login", "/forgotPassword", "/resetPassword"];
+const protectedPages = ["/home", "/products", "/categories", "/users", "/settings"];
 export default function middleware(req) {
   const { pathname } = req.nextUrl;
   const authToken = req.cookies.get("sessionToken")?.value;
