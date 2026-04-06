@@ -16,7 +16,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
         sku: "",
         category: "", // Initial empty, niche useEffect mein set hoga
         price: "",
-        stock: ""
+        stock: "",
     };
 
     const [formData, setFormData] = useState(initialState);
@@ -29,7 +29,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
             // Agar naya product hai, toh pehli category default set kar dein
             if (!productToEdit && res.data.length > 0) {
-                setFormData(prev => ({ ...prev, category: res.data[0].name }));
+                setFormData((prev) => ({ ...prev, category: res.data[0].name }));
             }
         } catch (error) {
             console.error("Error loading categories:", error);
@@ -47,7 +47,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                 sku: productToEdit.sku || "",
                 category: productToEdit.category || "",
                 price: productToEdit.price || "",
-                stock: productToEdit.stock || ""
+                stock: productToEdit.stock || "",
             });
         } else {
             setFormData(initialState);
@@ -63,7 +63,8 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.category) return showAlert({ message: "Please select a category", type: "error" });
+        if (!formData.category)
+            return showAlert({ message: "Please select a category", type: "error" });
 
         setLoading(true);
         try {
@@ -76,7 +77,8 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
             if (res.status === 201 || res.status === 200) {
                 showAlert({
-                    message: res.data.message || "Operation successful!", type: "success"
+                    message: res.data.message || "Operation successful!",
+                    type: "success",
                 });
                 refreshData();
                 onClose();
@@ -97,7 +99,16 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                 <div className={styles.modalHeader}>
                     <h2>{productToEdit ? "Edit Product" : "Add New Product"}</h2>
                     <button className={styles.closeBtn} onClick={onClose}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
@@ -140,7 +151,9 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="" disabled>Select a category</option>
+                            <option value="" disabled>
+                                Select a category
+                            </option>
                             {/* 2. Categories ko dynamic map kiya yahan */}
                             {categories.map((cat) => (
                                 <option key={cat._id} value={cat.name}>
@@ -149,24 +162,26 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                             ))}
                         </select>
                         {categories.length === 0 && (
-                            <small style={{ color: 'var(--error-color)', fontSize: '11px' }}>
+                            <small style={{ color: "var(--error-color)", fontSize: "11px" }}>
                                 No categories found. Please add one first.
                             </small>
                         )}
                     </div>
 
-                    <div className={styles.row}>                        <div className={styles.formGroup} style={{ flex: 1 }}>
-                        <label>Price</label>
-                        <input
-                            name="price"
-                            type="number"
-                            className={styles.input}
-                            placeholder="0.00"
-                            value={formData.price}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                    <div className={styles.row}>
+                        {" "}
+                        <div className={styles.formGroup} style={{ flex: 1 }}>
+                            <label>Price</label>
+                            <input
+                                name="price"
+                                type="number"
+                                className={styles.input}
+                                placeholder="0.00"
+                                value={formData.price}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                         <div className={styles.formGroup} style={{ flex: 1 }}>
                             <label>Stock</label>
                             <input
@@ -182,9 +197,23 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
                     </div>
 
                     <div className={styles.modalFooter}>
-                        <button type="button" className={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                        <button type="submit" className={styles.saveBtn} disabled={loading || categories.length === 0}>
-                            {loading ? "Saving..." : productToEdit ? "Update Changes" : "Save Product"}
+                        <button
+                            type="button"
+                            className={styles.cancelBtn}
+                            onClick={onClose}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className={styles.saveBtn}
+                            disabled={loading || categories.length === 0}
+                        >
+                            {loading
+                                ? "Saving..."
+                                : productToEdit
+                                    ? "Update Changes"
+                                    : "Save Product"}
                         </button>
                     </div>
                 </form>
