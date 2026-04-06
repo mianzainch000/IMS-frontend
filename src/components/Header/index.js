@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
-// usePathname ko add kiya gaya hai current page detect karne ke liye
+import { useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import styles from "@/css/Header.module.css";
 
+// --- Icons Components ---
 const SearchIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
@@ -18,37 +18,20 @@ const BellIcon = () => (
     </svg>
 );
 
-const Header = () => {
+const Header = ({ user }) => {
     const router = useRouter();
-    const pathname = usePathname(); // Ye batayega ke hum kis page par hain
+    const pathname = usePathname();
     const searchParams = useSearchParams();
 
+    // Initial search value from URL
     const [search, setSearch] = useState(searchParams.get("q") || "");
+
+    // Badge count state (isay aap notification logic ke liye use kar sakte hain)
     const [badgeCount, setBadgeCount] = useState(0);
 
-    // --- Dynamic Bell Logic ---
-    useEffect(() => {
-        const handleUpdate = (e) => setBadgeCount(e.detail);
+    // Dynamic Avatar Initial (e.g., "Zain" -> "Z")
+    const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
-        // Dashboard/Products se aane wale signal ko sunna
-        window.addEventListener("updateCartBadge", handleUpdate);
-
-        // Initial fetch for badge
-        const quickFetch = async () => {
-            try {
-                const res = await fetch("/products/api");
-                const data = await res.json();
-                const count = data.filter(p => p.stock > 0 && p.stock <= 5).length;
-                setBadgeCount(count);
-            } catch (e) { console.error(e); }
-        };
-        quickFetch();
-
-        return () => window.removeEventListener("updateCartBadge", handleUpdate);
-    }, []);
-
-
-    // --- Fixed Search Handler ---
     const handleSearch = (e) => {
         const value = e.target.value;
         setSearch(value);
@@ -60,13 +43,13 @@ const Header = () => {
             params.delete("q");
         }
 
-        // FIX: Ab ye /products par redirect nahi karega
-        // Balki jis page (pathname) par aap hain, usi ka URL update karega
+        // Current page par hi search params update karega
         router.push(`${pathname}?${params.toString()}`);
     };
 
     return (
         <header className={styles.header}>
+            {/* 1. Search Bar */}
             <div className={styles.searchWrapper}>
                 <span className={styles.searchIcon}><SearchIcon /></span>
                 <input
@@ -78,6 +61,7 @@ const Header = () => {
                 />
             </div>
 
+            {/* 2. Actions (Notifications & Profile) */}
             <div className={styles.actions}>
                 <div className={styles.notificationBell}>
                     <BellIcon />
@@ -86,10 +70,10 @@ const Header = () => {
 
                 <div className={styles.userProfile}>
                     <div className={styles.userInfo}>
-                        <span className={styles.userName}>Zain Ishfaq</span>
-                        <span className={styles.userRole}>Administrator</span>
+                        <span className={styles.userName}>{user?.name || "User Name"}</span>
+                        <span className={styles.userRole}>{user?.role || "Viewer"}</span>
                     </div>
-                    <div className={styles.avatar}>Z</div>
+                    <div className={styles.avatar}>{userInitial}</div>
                 </div>
             </div>
         </header>

@@ -11,7 +11,7 @@ const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // --- 1. Load Data (GET) ---
+    // --- 1. Load Data ---
     const loadUsers = async () => {
         setLoading(true);
         try {
@@ -29,14 +29,15 @@ const UsersPage = () => {
         loadUsers();
     }, []);
 
-    // --- 2. Update Role (PUT) ---
-    const handleRoleChange = async (id, newRole) => {
+    // --- 2. Update Role / Status ---
+    // Ek hi generic function jo dono ko handle kare
+    const updateUserDetail = async (id, payload) => {
         setLoading(true);
         try {
-            const res = await axios.put(`/users/api/${id}`, { role: newRole });
+            const res = await axios.put(`/users/api/${id}`, payload);
             if (res.status === 200) {
-                showSnackbar({ message: "Role updated successfully!", type: "success" });
-                loadUsers(); // Refresh list
+                showSnackbar({ message: "Updated successfully!", type: "success" });
+                loadUsers();
             }
         } catch (error) {
             const { message } = handleAxiosError(error);
@@ -63,7 +64,7 @@ const UsersPage = () => {
                         <tr>
                             <th>User Name</th>
                             <th>Role</th>
-                            <th>Status</th>
+                            <th>Status (Click to toggle)</th>
                             <th>Change Role</th>
                         </tr>
                     </thead>
@@ -81,15 +82,18 @@ const UsersPage = () => {
                                 </td>
                                 <td><span className={styles.roleBadge}>{u.role}</span></td>
                                 <td>
-                                    <span className={u.status === "Active" ? styles.statusActive : styles.statusInactive}>
-                                        {u.status}
+                                    <span
+                                        className={u.status === "Active" ? styles.statusActive : styles.statusInactive}
+                                        onClick={() => updateUserDetail(u._id, { status: u.status === "Active" ? "Inactive" : "Active" })}
+                                    >
+                                        {u.status || "Active"}
                                     </span>
                                 </td>
                                 <td>
                                     <select
                                         className={styles.roleSelect}
                                         value={u.role}
-                                        onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                                        onChange={(e) => updateUserDetail(u._id, { role: e.target.value })}
                                     >
                                         <option value="Admin">Admin</option>
                                         <option value="Editor">Editor</option>

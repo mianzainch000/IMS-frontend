@@ -24,10 +24,20 @@ export const authOptions = {
             const { token, user } = res.data;
             const cookieStore = await cookies();
             // route.js ke andar authorize function mein:
-            cookieStore.set("user", JSON.stringify(user), {
-              maxAge: 24 * 60 * 60,
-              path: "/" // <--- Ye line add karein taake poori app mein cookie mil sake
-            }); cookieStore.set("sessionToken", token, {
+            // user object ko pehle prepare karein taake role default "Staff" ho jaye
+            const userWithRole = {
+              ...user,
+              role: user.role || "Viewer" // Agar backend se role nahi aa raha toh "Staff" set ho jaye
+            };
+
+            // Ab isay cookie mein save karein
+            cookieStore.set("user", JSON.stringify(userWithRole), {
+              maxAge: 24 * 60 * 60, // 24 hours
+              path: "/",            // Poori app mein access ke liye
+              secure: true,         // HTTPS ke liye zaroori hai
+              sameSite: "lax"
+            });
+            cookieStore.set("sessionToken", token, {
               secure: true,
               maxAge: 24 * 60 * 60,
             });

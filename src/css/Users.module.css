@@ -3,18 +3,11 @@
   flex-direction: column;
   gap: 24px;
 }
+
 .pageHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.addBtn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
 }
 
 .tableCard {
@@ -22,18 +15,24 @@
   border-radius: 12px;
   border: 1px solid var(--border-color);
   overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
+
 .table {
   width: 100%;
   border-collapse: collapse;
 }
+
 .table th {
   text-align: left;
   padding: 16px;
-  background: var(--bg-color);
+  background: #f9fafb;
   color: var(--text-muted);
   font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
+
 .table td {
   padding: 16px;
   border-bottom: 1px solid var(--border-color);
@@ -44,6 +43,7 @@
   align-items: center;
   gap: 12px;
 }
+
 .avatar {
   width: 35px;
   height: 35px;
@@ -55,10 +55,12 @@
   justify-content: center;
   font-weight: bold;
 }
+
 .userName {
   font-weight: 600;
   color: var(--text-main);
 }
+
 .userEmail {
   font-size: 12px;
   color: var(--text-muted);
@@ -67,22 +69,53 @@
 .roleBadge {
   background: #e0e7ff;
   color: #4338ca;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
 }
+
+/* Status Badges */
 .statusActive {
-  color: #10b981;
-  font-weight: bold;
-}
-.statusInactive {
-  color: #ef4444;
-  font-weight: bold;
-}
-.editBtn {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  padding: 5px 10px;
-  border-radius: 6px;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.statusInactive {
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.statusActive:hover,
+.statusInactive:hover {
+  border-color: currentColor;
+}
+
+/* ✅ Dropdown Styling */
+.roleSelect {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-main);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.roleSelect:focus {
+  border-color: var(--primary-color);
 }
