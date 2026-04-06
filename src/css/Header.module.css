@@ -130,6 +130,51 @@
   }
 }
 
+/* --- Notification Bell (Aapke design ke mutabiq) --- */
+.notificationBell {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  background-color: var(--bg-color); /* Aapke variables use kiye hain */
+}
+
+.notificationBell:hover {
+  background-color: var(--border-color);
+  color: var(--primary-color);
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: var(--error-color);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--card-bg);
+  padding: 0 4px;
+}
+
+/* Mobile par Bell ko Avatar ke sath adjust karne ke liye */
+@media (max-width: 768px) {
+  .notificationBell {
+    width: 34px;
+    height: 34px;
+  }
+}
 /* ---------------- EXTRA SMALL ---------------- */
 @media (max-width: 480px) {
   .header {

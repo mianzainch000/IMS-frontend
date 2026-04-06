@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
 import axios from "axios";
+import { updateBellNotification } from "@/utils/updateBellNotification";
 
 const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
     const showAlert = useSnackbar();
@@ -74,6 +75,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
 
             const method = productToEdit ? "put" : "post";
             const res = await axios[method](url, formData);
+            await updateBellNotification(); // 🔥 IMPORTANT
 
             if (res.status === 201 || res.status === 200) {
                 showAlert({

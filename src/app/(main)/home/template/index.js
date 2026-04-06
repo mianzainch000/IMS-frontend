@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react"; // useMemo add kiya
+import { useSearchParams } from "next/navigation"; // Search query pakadne ke liye
 import axios from "axios";
 import Link from "next/link";
 import styles from "@/css/Home.module.css";
@@ -16,6 +17,11 @@ const StatIcons = {
 
 const HomePage = () => {
     const showSnackbar = useSnackbar();
+
+    // URL se search query ("q") uthana
+    const searchParams = useSearchParams();
+    const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+
     const [loading, setLoading] = useState(true);
     const [dashboardData, setDashboardData] = useState({
         totalProducts: 0,
@@ -36,6 +42,10 @@ const HomePage = () => {
             const alerts = products.filter(p => p.stock > 0 && p.stock <= 5);
             const recent = [...products].reverse().slice(0, 5);
 
+            // Sync Header Bell
+            const event = new CustomEvent("updateCartBadge", { detail: alerts.length });
+            window.dispatchEvent(event);
+
             setDashboardData({
                 totalProducts: products.length,
                 lowStockCount: alerts.length,
@@ -51,6 +61,22 @@ const HomePage = () => {
 
     useEffect(() => { loadDashboardData(); }, []);
 
+    // --- SEARCH FILTER LOGIC ---
+    // In-memory filter jo sirf dikhne wali items par kaam karega
+    // Dashboard par Recent Updates aur Alerts ke liye
+    const filteredRecentUpdates = useMemo(() => {
+        return dashboardData.recentUpdates.filter(p =>
+            // startsWith check karega ke kya naam search query se shuru hota hai
+            p.name.toLowerCase().startsWith(searchQuery) ||
+            p.category.toLowerCase().startsWith(searchQuery)
+        );
+    }, [dashboardData.recentUpdates, searchQuery]);
+
+    const filteredAlerts = useMemo(() => {
+        return dashboardData.lowStockItems.filter(p =>
+            p.name.toLowerCase().startsWith(searchQuery)
+        );
+    }, [dashboardData.lowStockItems, searchQuery]);
     const stats = [
         { title: "Total Products", value: dashboardData.totalProducts, icon: <StatIcons.Box />, color: "#2563eb" },
         { title: "Low Stock Alert", value: dashboardData.lowStockCount, icon: <StatIcons.Alert />, color: "#ef4444" },
@@ -62,7 +88,6 @@ const HomePage = () => {
         <div className={styles.dashboardContainer}>
             {loading && <Loader />}
 
-            {/* Header Section */}
             <div className={styles.welcomeSection}>
                 <h1>
                     <span className={styles.desktopText}>Dashboard Overview</span>
@@ -71,15 +96,15 @@ const HomePage = () => {
                 <p>Welcome back! Check your inventory status.</p>
             </div>
 
-            {/* Notification / Alert List */}
-            {dashboardData.lowStockItems.length > 0 && (
+            {/* Notification Area (Filtered) */}
+            {filteredAlerts.length > 0 && (
                 <div className={styles.notificationArea}>
                     <div className={styles.alertHeader}>
                         <StatIcons.Alert />
-                        <span>Inventory Alerts ({dashboardData.lowStockCount})</span>
+                        <span>Inventory Alerts ({filteredAlerts.length})</span>
                     </div>
                     <div className={styles.alertList}>
-                        {dashboardData.lowStockItems.map((item) => (
+                        {filteredAlerts.map((item) => (
                             <div key={item._id} className={styles.alertItem}>
                                 <p className={styles.alertText}>
                                     <strong>{item.name}</strong>
@@ -94,7 +119,6 @@ const HomePage = () => {
                 </div>
             )}
 
-            {/* Quick Stats Grid */}
             <div className={styles.statsGrid}>
                 {stats.map((item, index) => (
                     <div key={index} className={styles.card}>
@@ -109,17 +133,10 @@ const HomePage = () => {
                 ))}
             </div>
 
-            {/* Recent Updates Table */}
             <div className={styles.recentSection}>
                 <div className={styles.tableHeader}>
-                    <h2>
-                        <span className={styles.desktopText}>Recent Updates</span>
-                        <span className={styles.mobileText}>Updates</span>
-                    </h2>
-                    <Link href="/products" className={styles.viewAllBtn}>
-                        <span className={styles.desktopText}>View All</span>
-                        <span className={styles.mobileText}>View</span>
-                    </Link>
+                    <h2>Recent Updates</h2>
+                    <Link href="/products" className={styles.viewAllBtn}>View All</Link>
                 </div>
 
                 <div className={styles.tableWrapper}>
@@ -133,20 +150,26 @@ const HomePage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {dashboardData.recentUpdates.map((product) => (
-                                <tr key={product._id}>
-                                    <td data-label="Name">
-                                        <span className={styles.productName}>{product.name}</span>
-                                    </td>
-                                    <td data-label="Category">{product.category}</td>
-                                    <td data-label="Quantity">{product.stock} pcs</td>
-                                    <td data-label="Status">
-                                        <span className={`${styles.statusBadge} ${product.stock > 5 ? styles.inStock : product.stock > 0 ? styles.lowStock : styles.outOfStock}`}>
-                                            {product.stock > 5 ? "In Stock" : product.stock > 0 ? "Low Stock" : "Out"}
-                                        </span>
+                            {filteredRecentUpdates.length > 0 ? (
+                                filteredRecentUpdates.map((product) => (
+                                    <tr key={product._id}>
+                                        <td data-label="Name">{product.name}</td>
+                                        <td data-label="Category">{product.category}</td>
+                                        <td data-label="Quantity">{product.stock} pcs</td>
+                                        <td data-label="Status">
+                                            <span className={`${styles.statusBadge} ${product.stock > 5 ? styles.inStock : product.stock > 0 ? styles.lowStock : styles.outOfStock}`}>
+                                                {product.stock > 5 ? "In Stock" : product.stock > 0 ? "Low Stock" : "Out"}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                                        {searchQuery ? `No matches found for "${searchQuery}"` : "No recent updates."}
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>

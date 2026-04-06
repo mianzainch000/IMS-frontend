@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation"; // New import for search
 import axios from "axios";
 import styles from "@/css/Products.module.css";
 import ProductModal from "@/components/ProductModal";
 import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
-import ConfirmModal from "@/components/ConfirmModal"; // ConfirmModal import kiya
-
+import ConfirmModal from "@/components/ConfirmModal";
+import { updateBellNotification } from "@/utils/updateBellNotification";
 // Icons Object
 const Icons = {
     Plus: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
@@ -17,12 +18,14 @@ const Icons = {
 
 const ProductsPage = () => {
     const showSnackbar = useSnackbar();
+    const searchParams = useSearchParams(); // Header ki search query pakarne ke liye
+    const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [productToEdit, setProductToEdit] = useState(null);
 
-    // --- Confirm Modal States ---
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [productIdToDelete, setProductIdToDelete] = useState(null);
 
@@ -44,23 +47,38 @@ const ProductsPage = () => {
         loadProducts();
     }, []);
 
-    // --- 2. Delete Flow ---
+    // --- 2. Dynamic Filter Logic ---
+    const filteredProducts = products.filter((p) => {
+        const query = searchQuery.toLowerCase();
+        return (
+            // Ab sirf wohi dikhayega jo is letter se shuru hote hain
+            p.name?.toLowerCase().startsWith(query) ||
+            p.sku?.toLowerCase().startsWith(query) ||
+            p.category?.toLowerCase().startsWith(query)
+        );
+    });
 
-    // Sirf Modal open karne ke liye
+    // --- 3. Delete Flow ---
     const handleDeleteClick = (id) => {
         setProductIdToDelete(id);
         setIsConfirmOpen(true);
     };
 
-    // Asli logic jo Modal ke Confirm button par chalegi
     const handleConfirmDelete = async () => {
         if (!productIdToDelete) return;
-
         setLoading(true);
         try {
-            await axios.delete(`/products/api/${productIdToDelete}`);
-            showSnackbar({ message: "Product deleted!", type: "success" });
-            loadProducts(); // Table Refresh
+            const res = await axios.delete(`/products/api/${productIdToDelete}`);
+            await updateBellNotification(); // 🔥 IMPORTANT
+
+            if (res.status === 200) {
+                showSnackbar({
+                    message: res.data.message || "Product deleted!",
+                    type: "success",
+                });
+                loadProducts();
+            }
+
         } catch (error) {
             const { message } = handleAxiosError(error);
             showSnackbar({ message, type: "error" });
@@ -71,7 +89,6 @@ const ProductsPage = () => {
         }
     };
 
-    // --- 3. Edit Handler ---
     const handleEditClick = (product) => {
         setProductToEdit(product);
         setIsModalOpen(true);
@@ -81,7 +98,6 @@ const ProductsPage = () => {
         <div className={styles.container}>
             {loading && <Loader />}
 
-            {/* Custom Confirm Modal Integration */}
             <ConfirmModal
                 isOpen={isConfirmOpen}
                 onClose={() => setIsConfirmOpen(false)}
@@ -125,8 +141,8 @@ const ProductsPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.length > 0 ? (
-                            products.map((p) => (
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((p) => (
                                 <tr key={p._id}>
                                     <td data-label="Product Name">{p.name}</td>
                                     <td data-label="SKU">{p.sku}</td>
@@ -135,22 +151,17 @@ const ProductsPage = () => {
                                     </td>
                                     <td data-label="Price">${p.price}</td>
                                     <td data-label="Stock">
-                                        <span className={p.stock < 20 ? styles.lowStock : ""}>
+                                        {/* Low stock coloring (yahan aap apni marzi ka limit set kar sakte hain) */}
+                                        <span className={p.stock <= 5 ? styles.lowStock : ""}>
                                             {p.stock} pcs
                                         </span>
                                     </td>
                                     <td data-label="Actions">
                                         <div className={styles.actionGroup}>
-                                            <button
-                                                className={styles.editBtn}
-                                                onClick={() => handleEditClick(p)}
-                                            >
+                                            <button className={styles.editBtn} onClick={() => handleEditClick(p)}>
                                                 <Icons.Edit />
                                             </button>
-                                            <button
-                                                className={styles.deleteBtn}
-                                                onClick={() => handleDeleteClick(p._id)}
-                                            >
+                                            <button className={styles.deleteBtn} onClick={() => handleDeleteClick(p._id)}>
                                                 <Icons.Delete />
                                             </button>
                                         </div>
@@ -160,8 +171,8 @@ const ProductsPage = () => {
                         ) : (
                             !loading && (
                                 <tr>
-                                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
-                                        No products found.
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                                        {searchQuery ? `No products found for "${searchQuery}"` : "No products found."}
                                     </td>
                                 </tr>
                             )
