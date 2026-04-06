@@ -12,4 +12,6 @@ export const apiConfig = {
   getCategory: "getCategory",
   updateCategory: "updateCategory",
   deleteCategory: "deleteCategory",
+  allUsers: "allUsers", // GET: Saare users lane ke liye
+  updateRole: "updateRole", // PUT: Role badalne ke liye (/updateRole/:id)
 };

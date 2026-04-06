@@ -23,7 +23,11 @@ export const authOptions = {
           if (res?.status === 200) {
             const { token, user } = res.data;
             const cookieStore = await cookies();
-            cookieStore.set("sessionToken", token, {
+            // route.js ke andar authorize function mein:
+            cookieStore.set("user", JSON.stringify(user), {
+              maxAge: 24 * 60 * 60,
+              path: "/" // <--- Ye line add karein taake poori app mein cookie mil sake
+            }); cookieStore.set("sessionToken", token, {
               secure: true,
               maxAge: 24 * 60 * 60,
             });
