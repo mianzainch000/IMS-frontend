@@ -22,32 +22,4 @@ axiosClient.interceptors.request.use(async function (config) {
   return config;
 });
 
-// --- 2. RESPONSE INTERCEPTOR (Yahan issue tha) ---
-axiosClient.interceptors.response.use(
-  (response) => {
-    // ✅ Check status 403 yahan success block mein karein
-    if (response.status === 403) {
-      const message = response.data?.message || "";
-
-      // Agar backend se "Inactive" message aaye
-      if (message.includes("Inactive")) {
-        if (typeof window !== "undefined") {
-          // Cookies delete karein
-          document.cookie =
-            "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          document.cookie =
-            "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-          // ✅ Redirect to landing/login page
-          window.location.href = "/";
-        }
-      }
-    }
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
-
 export default axiosClient;

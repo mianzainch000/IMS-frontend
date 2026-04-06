@@ -6,6 +6,7 @@ import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
 import ConfirmModal from "@/components/ConfirmModal"; // Confirm Modal Import
+import { handleGlobalLogout } from "@/utils/autoLogout"; // Utility import lazmi karein
 
 const CategoriesPage = () => {
     const showSnackbar = useSnackbar();
@@ -20,17 +21,32 @@ const CategoriesPage = () => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState(null);
 
+
     const loadCategories = async () => {
         setLoading(true);
         try {
             const res = await axios.get("/categories/api");
             setCategories(res.data);
         } catch (error) {
-            showSnackbar({ message: handleAxiosError(error).message, type: "error" });
-        } finally { setLoading(false); }
+            // 1. Check if the error is 403 (Inactive/Unauthorized)
+            if (error.response?.status === 403) {
+                handleGlobalLogout();
+            } else {
+                // 2. Baqi generic errors ke liye purana logic
+                const { message } = handleAxiosError(error);
+                showSnackbar({ message, type: "error" });
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
-    useEffect(() => { loadCategories(); }, []);
+    useEffect(() => {
+
+
+        // 2. Phir API call karein jo middleware se guzre
+        loadCategories();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -10,6 +10,8 @@ import handleAxiosError from "@/components/HandleAxiosError";
 import ConfirmModal from "@/components/ConfirmModal";
 import { updateBellNotification } from "@/utils/updateBellNotification";
 import PermissionWrapper from "@/components/PermissionWrapper";
+import { handleGlobalLogout } from "@/utils/autoLogout"; // Utility import lazmi karein
+
 // Icons Object
 const Icons = {
     Plus: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
@@ -31,14 +33,21 @@ const ProductsPage = () => {
     const [productIdToDelete, setProductIdToDelete] = useState(null);
 
     // --- 1. Load Data (GET) ---
+
     const loadProducts = async () => {
         setLoading(true);
         try {
             const res = await axios.get("/products/api");
             setProducts(res.data);
         } catch (error) {
-            const { message } = handleAxiosError(error);
-            showSnackbar({ message, type: "error" });
+            // ✅ 403 status check for Inactive User or Session Expired
+            if (error.response?.status === 403) {
+                handleGlobalLogout();
+            } else {
+                // Baqi errors (404, 500 etc) ke liye snackbar
+                const { message } = handleAxiosError(error);
+                showSnackbar({ message, type: "error" });
+            }
         } finally {
             setLoading(false);
         }

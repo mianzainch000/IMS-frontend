@@ -14,4 +14,5 @@ export const apiConfig = {
   deleteCategory: "deleteCategory",
   allUsers: "allUsers", // GET: Saare users lane ke liye
   updateRole: "updateRole", // PUT: Role badalne ke liye (/updateRole/:id)
+  adminResetPassword: "adminResetPassword", // Naya endpoint add kiya
 };

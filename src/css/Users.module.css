@@ -119,3 +119,145 @@
 .roleSelect:focus {
   border-color: var(--primary-color);
 }
+
+/* --- RESET PASSWORD BUTTON --- */
+.resetBtn {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.resetBtn:hover {
+  background-color: #dc2626; /* Darker red on hover */
+  transform: translateY(-1px);
+}
+
+.resetBtn:active {
+  transform: translateY(0px);
+}
+
+/* --- MODAL OVERLAY --- */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dim background */
+  backdrop-filter: blur(4px); /* Modern blur effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* --- MODAL BOX --- */
+.modalContent {
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-color);
+  animation: slideUp 0.3s ease-out;
+}
+
+.modalContent h3 {
+  margin-bottom: 8px;
+  color: var(--text-main);
+  font-size: 18px;
+}
+
+.modalContent p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* --- MODAL INPUT --- */
+.modalInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modalInput:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- MODAL ACTIONS --- */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancelBtn {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cancelBtn:hover {
+  background: #f9fafb;
+  color: var(--text-main);
+}
+
+.confirmBtn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.confirmBtn:hover {
+  background: var(--primary-hover);
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

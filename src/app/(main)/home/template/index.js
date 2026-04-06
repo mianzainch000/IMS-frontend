@@ -8,6 +8,7 @@ import Loader from "@/components/Loader";
 import { useSnackbar } from "@/components/Snackbar";
 import handleAxiosError from "@/components/HandleAxiosError";
 import { deleteCookie } from "cookies-next";
+import { handleGlobalLogout } from "@/utils/autoLogout"; // Utility import karein
 
 // --- Icons Component ---
 const StatIcons = {
@@ -33,12 +34,7 @@ const HomePage = () => {
         recentUpdates: []
     });
 
-    // --- Logout Helper (For Inactive Status) ---
-    const handleAutoLogout = () => {
-        deleteCookie("sessionToken", { path: "/" });
-        document.cookie = "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = "/";
-    };
+
 
     // --- Load All Dashboard Data ---
     const loadDashboardData = async () => {
@@ -76,7 +72,7 @@ const HomePage = () => {
         } catch (error) {
             // ✅ If user becomes Inactive while on Dashboard
             if (error.response?.status === 403) {
-                handleAutoLogout();
+                handleGlobalLogout();
             } else {
                 const { message } = handleAxiosError(error);
                 showSnackbar({ message, type: "error" });
