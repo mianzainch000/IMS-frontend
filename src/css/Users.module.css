@@ -241,6 +241,107 @@
   background: var(--primary-hover);
 }
 
+/* ============================= */
+/* 📱 MOBILE RESPONSIVENESS */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .pageHeader h1 {
+    font-size: 20px;
+  }
+
+  .table {
+    border: 0;
+  }
+
+  .table thead {
+    display: none; /* hide table header */
+  }
+
+  .table tr {
+    display: block;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    font-size: 13px;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .userInfo {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .userName {
+    font-size: 14px;
+  }
+
+  .userEmail {
+    font-size: 11px;
+  }
+
+  .roleSelect {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .resetBtn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+
+/* ============================= */
+/* 📱 SMALL MOBILE */
+/* ============================= */
+
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 16px;
+    max-width: 90%;
+  }
+
+  .modalInput {
+    font-size: 13px;
+  }
+
+  .confirmBtn,
+  .cancelBtn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .table td {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .table td::before {
+    margin-bottom: 2px;
+  }
+}
 /* --- ANIMATIONS --- */
 @keyframes fadeIn {
   from {
