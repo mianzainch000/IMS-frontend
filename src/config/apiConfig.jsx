@@ -15,4 +15,6 @@ export const apiConfig = {
   allUsers: "allUsers", // GET: Saare users lane ke liye
   updateRole: "updateRole", // PUT: Role badalne ke liye (/updateRole/:id)
   adminResetPassword: "adminResetPassword", // Naya endpoint add kiya
+  scanProduct: "scan", // GET: scan/:sku
+  checkout: "checkout", // POST: checkout
 };
