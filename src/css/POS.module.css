@@ -177,6 +177,53 @@
   background: var(--primary-hover);
 }
 
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printableBill,
+  .printableBill * {
+    visibility: visible;
+  }
+  .printableBill {
+    position: absolute;
+    left: 50%; /* Bill ko page ke center mein laane ke liye */
+    transform: translateX(-50%); /* Bilkul center align karne ke liye */
+    top: 0;
+    width: 80mm;
+    padding: 10px; /* Thori si space (padding) charo taraf */
+    border: none;
+  }
+}
+
+.printableBill {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  color: black;
+  text-align: center; /* Poora bill center mein */
+  width: 80mm;
+  margin: 0 auto;
+}
+
+.billHeader {
+  text-align: center;
+  border-bottom: 1px dashed #000;
+  padding-bottom: 10px;
+  margin-bottom: 10px; /* Header aur items ke beech space */
+}
+
+.billTable {
+  width: 100%;
+  margin: 10px 0;
+  border-bottom: 1px dashed #000;
+  border-collapse: collapse;
+}
+
+.billTable th,
+.billTable td {
+  padding: 5px 0; /* Rows ke darmiyan space */
+  text-align: center; /* Table ka data bhi center mein */
+}
 /* RESPONSIVE */
 @media (max-width: 1000px) {
   .posContainer {
