@@ -1,9 +1,10 @@
 .posContainer {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 380px;
   gap: 20px;
-  height: calc(100vh - 100px);
-  padding: 10px;
+  min-height: calc(100vh - 40px);
+  padding: 20px;
+  background-color: var(--bg-color);
 }
 
 .leftSection {
@@ -18,7 +19,6 @@
 .scanHeader {
   padding: 20px;
   border-bottom: 1px solid var(--border-color);
-  background: #f9fafb;
 }
 
 .scanInput {
@@ -30,23 +30,24 @@
   outline: none;
 }
 
+/* Table */
 .cartTableWrapper {
   flex: 1;
+  padding: 20px;
   overflow-y: auto;
-  padding: 10px;
 }
 
 .cartTable {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
 }
 
 .cartTable th {
+  text-align: left;
   padding: 12px;
-  border-bottom: 2px solid var(--border-color);
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .cartTable td {
@@ -54,25 +55,33 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.productInfo {
+.productCell {
   display: flex;
   flex-direction: column;
 }
-
 .pName {
   font-weight: 600;
   color: var(--text-main);
 }
-
 .pSku {
   font-size: 12px;
   color: var(--text-muted);
 }
 
+/* Quantity Fix */
+.qtyContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 .qtyControl {
   display: flex;
   align-items: center;
   gap: 5px;
+  background: #f9fafb;
+  padding: 4px;
+  border-radius: 6px;
+  width: fit-content;
 }
 
 .qtyControl button {
@@ -84,35 +93,55 @@
   border-radius: 4px;
 }
 
-.qtyControl input {
-  width: 40px;
+.qtyInput {
+  width: 50px;
   text-align: center;
-  border: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
   font-weight: bold;
+  padding: 4px;
+}
+
+.stockLabel {
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .deleteBtn {
   color: var(--error-color);
   background: none;
   border: 1px solid var(--error-color);
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.deleteBtn:hover {
-  background: var(--error-color);
-  color: white;
+.emptyMessageRow {
+  padding: 60px 0 !important;
+  text-align: center;
+  border-bottom: none !important;
 }
 
-/* RIGHT SECTION */
-.rightSection {
+.emptyState {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
 }
 
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.emptyState p {
+  font-size: 16px;
+  font-weight: 500;
+}
+/* Right Sidebar */
 .summaryCard {
   background: var(--card-bg);
   padding: 24px;
@@ -122,42 +151,24 @@
   top: 10px;
 }
 
+.summaryTitle {
+  margin-bottom: 20px;
+  color: var(--text-main);
+}
 .summaryRow {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
-  color: var(--text-muted);
+  margin-bottom: 12px;
 }
-
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 15px 0;
+}
 .totalRow {
   font-size: 20px;
   font-weight: 800;
-  color: var(--text-main);
-  margin-top: 10px;
-}
-
-.divider {
-  margin: 15px 0;
-  border: 0;
-  border-top: 1px solid var(--border-color);
-}
-
-.paymentMethods {
-  margin: 20px 0;
-}
-
-.paymentMethods label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.paymentMethods select {
-  width: 100%;
-  padding: 10px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border-color);
+  color: var(--primary-color);
 }
 
 .checkoutBtn {
@@ -167,17 +178,58 @@
   color: white;
   border: none;
   border-radius: var(--radius);
-  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .checkoutBtn:hover {
   background: var(--primary-hover);
 }
 
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .posContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .cartTable thead {
+    display: none;
+  }
+  .cartTable tr {
+    display: block;
+    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .cartTable td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none;
+  }
+  .cartTable td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .rightSection {
+    margin-top: 20px;
+  }
+}
+
+/* --- PRINT LOGIC --- */
+/* --- PRINT LOGIC --- */
+/* Ye class screen par hide rahegi */
+.printableBill {
+  display: none;
+}
+
 @media print {
+  /* Print karte waqt sirf bill dikhega */
   body * {
     visibility: hidden;
   }
@@ -185,53 +237,49 @@
   .printableBill * {
     visibility: visible;
   }
+
   .printableBill {
+    display: block !important;
     position: absolute;
-    left: 50%; /* Bill ko page ke center mein laane ke liye */
-    transform: translateX(-50%); /* Bilkul center align karne ke liye */
+    /* Center alignment */
+    left: 50%;
+    transform: translateX(-50%);
     top: 0;
+
+    /* Bill width and spacing */
     width: 80mm;
-    padding: 10px; /* Thori si space (padding) charo taraf */
-    border: none;
-  }
-}
+    padding: 5mm;
+    margin: 0 auto;
 
-.printableBill {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 14px;
-  color: black;
-  text-align: center; /* Poora bill center mein */
-  width: 80mm;
-  margin: 0 auto;
-}
-
-.billHeader {
-  text-align: center;
-  border-bottom: 1px dashed #000;
-  padding-bottom: 10px;
-  margin-bottom: 10px; /* Header aur items ke beech space */
-}
-
-.billTable {
-  width: 100%;
-  margin: 10px 0;
-  border-bottom: 1px dashed #000;
-  border-collapse: collapse;
-}
-
-.billTable th,
-.billTable td {
-  padding: 5px 0; /* Rows ke darmiyan space */
-  text-align: center; /* Table ka data bhi center mein */
-}
-/* RESPONSIVE */
-@media (max-width: 1000px) {
-  .posContainer {
-    grid-template-columns: 1fr;
-    height: auto;
+    /* Text styling */
+    color: black;
+    background: white;
   }
 
-  .rightSection {
-    margin-top: 20px;
+  .billHeader {
+    text-align: center;
+    border-bottom: 1px dashed #000;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  .billTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+
+  .billTable th,
+  .billTable td {
+    padding: 5px 0;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  .billFooter {
+    text-align: center;
+    border-top: 1px dashed #000;
+    padding-top: 10px;
+    margin-top: 10px;
   }
 }
