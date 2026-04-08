@@ -1,3 +1,4 @@
+import UsersPage from "./template"
 const User = () => {
   return <UsersPage />;
 };

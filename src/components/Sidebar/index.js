@@ -124,6 +124,8 @@ const Sidebar = () => {
     { name: "Products", icon: <Icons.Package />, path: "/products" },
     { name: "Categories", icon: <Icons.Categories />, path: "/categories" },
     { name: "Pos", icon: <Icons.Users />, path: "/pos" },
+    { name: "Reports", icon: <Icons.Users />, path: "/reports" },
+
     { name: "Users", icon: <Icons.Users />, path: "/users" },
   ];
 
@@ -161,7 +163,7 @@ const Sidebar = () => {
             className={styles.logoutBtn}
             onClick={() => setIsModalOpen(true)}
           >
-            {}
+            { }
             <span className={styles.icon}>
               <Icons.Logout />
             </span>
@@ -170,7 +172,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      {}
+      { }
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -46,6 +46,9 @@ const Header = ({ user }) => {
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
+  const hideSearchOn = ["/reports", "/pos"];
+  const shouldShowSearch = !hideSearchOn.includes(pathname);
+
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearch(value);
@@ -62,21 +65,31 @@ const Header = ({ user }) => {
 
   return (
     <header className={styles.header}>
-      {}
-      <div className={styles.searchWrapper}>
-        <span className={styles.searchIcon}>
-          <SearchIcon />
-        </span>
-        <input
-          type="text"
-          placeholder="Search products, inventory..."
-          value={search}
-          onChange={handleSearch}
-          className={styles.searchInput}
-        />
+      {/* Search Bar: Condition ke mutabiq render hogi */}
+      <div className={styles.leftSection}>
+        {shouldShowSearch ? (
+          <div className={styles.searchWrapper}>
+            <span className={styles.searchIcon}>
+              <SearchIcon />
+            </span>
+            <input
+              type="text"
+              placeholder="Search products, inventory..."
+              value={search}
+              onChange={handleSearch}
+              className={styles.searchInput}
+            />
+          </div>
+        ) : (
+          <div className={styles.pageTitle}>
+            {/* Jab search na ho toh Page ka context dikhao */}
+            <h2> Overview</h2>
+          </div>
+
+        )}
       </div>
 
-      {}
+      {/* User Actions Section */}
       <div className={styles.actions}>
         <div className={styles.notificationBell}>
           <BellIcon />
@@ -85,8 +98,8 @@ const Header = ({ user }) => {
 
         <div className={styles.userProfile}>
           <div className={styles.userInfo}>
-            <span className={styles.userName}>{user?.name || "User Name"}</span>
-            <span className={styles.userRole}>{user?.role || "Viewer"}</span>
+            <span className={styles.userName}>{user?.name || "Zain Ishfaq"}</span>
+            <span className={styles.userRole}>{user?.role || "Admin"}</span>
           </div>
           <div className={styles.avatar}>{userInitial}</div>
         </div>

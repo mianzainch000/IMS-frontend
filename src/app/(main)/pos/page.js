@@ -1,3 +1,5 @@
+import POSPage from "./template"
+
 const Pos = () => {
   return <POSPage />;
 };

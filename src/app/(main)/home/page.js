@@ -1,5 +1,7 @@
+import HomePage from "./template"
+
 const Dashboard = () => {
-  return <Home />;
+  return <HomePage />;
 };
 
 export default Dashboard;

@@ -17,4 +17,5 @@ export const apiConfig = {
   adminResetPassword: "adminResetPassword",
   scanProduct: "scan",
   checkout: "checkout",
+  getReports: "analytics",
 };

@@ -1,3 +1,4 @@
+import ProductsPage from "./template";
 const PrdocutPage = () => {
   return <ProductsPage />;
 };

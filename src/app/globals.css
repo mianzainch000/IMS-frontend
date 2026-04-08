@@ -7,6 +7,10 @@
   --text-muted: #6b7280;
   --border-color: #e5e7eb;
   --error-color: #ef4444;
+  --success-color: #10b981; /* Main Green (Net Profit ke liye) */
+  --success-hover: #059669; /* Darker Green */
+  --success-bg: #ecfdf5; /* Very Light Green (Badges/Backgrounds) */
+  --success-border: #d1fae5;
   --radius: 8px;
 }
 
