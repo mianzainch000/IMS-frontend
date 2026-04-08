@@ -1,5 +1,4 @@
 .loaderOverlay {
-  /* Fixed: --bg ko --bg-color se badla aur opacity handle ki */
   top: 0;
   left: 0;
   width: 100vw;
@@ -12,13 +11,6 @@
   background-color: rgba(243, 244, 246, 0.9);
 }
 
-/* Agar aap chahie ke overlay background bhi variable se aaye:
-.loaderOverlay {
-  opacity: 0.9;
-  background-color: var(--bg-color);
-}
-*/
-
 .loaderWrapper {
   display: flex;
   position: relative;
@@ -27,8 +19,6 @@
 }
 
 .loader {
-  /* Fixed: --border-light ko --border-color se badla */
-  /* Fixed: --primary ko --primary-color se badla */
   width: 50px;
   height: 50px;
   border-radius: 50%;

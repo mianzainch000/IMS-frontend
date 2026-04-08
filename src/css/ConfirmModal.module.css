@@ -1,48 +1,48 @@
 .overlay {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
   display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 2000;
   padding: 16px;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .modal {
-  position: relative; /* Close button ke liye */
-  background: var(--card-bg);
-  padding: 32px 24px 24px 24px; /* Top padding thori zyada close icon ke liye */
-  border-radius: var(--radius);
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background: var(--card-bg);
+  padding: 32px 24px 24px 24px;
+  border-radius: var(--radius);
   animation: modalFadeIn 0.2s ease-out;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .closeBtn {
-  position: absolute;
   top: 12px;
   right: 12px;
-  background: transparent;
   border: none;
-  color: var(--text-muted);
-  cursor: pointer;
   padding: 5px;
-  border-radius: 50%;
-  transition: all 0.2s;
   display: flex;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 50%;
   align-items: center;
+  transition: all 0.2s;
+  background: transparent;
   justify-content: center;
+  color: var(--text-muted);
 }
 
 .closeBtn:hover {
-  background: var(--bg-color);
   color: var(--text-main);
+  background: var(--bg-color);
 }
 
 @keyframes modalFadeIn {
@@ -58,43 +58,42 @@
 
 .header h3 {
   margin: 0;
+  font-weight: 600;
   font-size: 1.25rem;
   color: var(--text-main);
-  font-weight: 600;
 }
 
 .body p {
   margin: 16px 0;
-  color: var(--text-muted);
   line-height: 1.6;
   font-size: 0.95rem;
+  color: var(--text-muted);
 }
 
 .footer {
-  display: flex;
-  justify-content: flex-end;
   gap: 12px;
+  display: flex;
   margin-top: 24px;
+  justify-content: flex-end;
 }
 
-/* --- BUTTONS FIX --- */
 .btn {
-  padding: 10px 20px;
-  border-radius: var(--radius); /* Variable based radius */
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   min-width: 90px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
 }
 
 .cancelBtn {
   background: transparent;
-  border: 1px solid var(--border-color);
   color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .cancelBtn:hover {
@@ -102,9 +101,9 @@
 }
 
 .confirmBtnDanger {
-  background: var(--error-color);
-  color: #ffffff;
   border: none;
+  color: #ffffff;
+  background: var(--error-color);
 }
 
 .confirmBtnDanger:hover {
@@ -113,16 +112,15 @@
 }
 
 .confirmBtnPrimary {
-  background: var(--primary-color);
-  color: #ffffff;
   border: none;
+  color: #ffffff;
+  background: var(--primary-color);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 480px) {
   .footer {
-    flex-direction: column-reverse;
     gap: 10px;
+    flex-direction: column-reverse;
   }
   .btn {
     width: 100%;

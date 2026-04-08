@@ -1,10 +1,5 @@
-import React from 'react'
-import Home from './template'
-
 const Dashboard = () => {
-  return (
-    <Home />
-  )
-}
+  return <Home />;
+};
 
-export default Dashboard
+export default Dashboard;

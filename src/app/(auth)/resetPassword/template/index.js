@@ -16,7 +16,6 @@ const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // URL se token nikalna
   const token = searchParams?.get("token") || "";
 
   const [loading, setLoading] = useState(false);
@@ -28,7 +27,6 @@ const ResetPassword = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // SVG Icons
   const EyeOpen = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +107,6 @@ const ResetPassword = () => {
         });
         setFormData({ password: "", confirmPassword: "" });
 
-        // Success ke baad login page par bhejna
         setTimeout(() => router.push("/login"), 2000);
       }
     } catch (error) {

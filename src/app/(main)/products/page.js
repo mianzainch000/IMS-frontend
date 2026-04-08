@@ -1,10 +1,5 @@
-import React from 'react'
-import ProductsPage from './template'
-
 const PrdocutPage = () => {
-    return (
-        <ProductsPage />
-    )
-}
+  return <ProductsPage />;
+};
 
-export default PrdocutPage
+export default PrdocutPage;

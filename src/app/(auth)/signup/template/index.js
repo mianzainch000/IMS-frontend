@@ -14,7 +14,6 @@ export default function SignupPage() {
   const showAlert = useSnackbar();
   const router = useRouter();
 
-  // Initial State for Reset
   const initialState = {
     firstName: "",
     lastName: "",
@@ -29,7 +28,6 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // SVG Icons for Eye
   const EyeOpen = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +102,6 @@ export default function SignupPage() {
           type: "success",
         });
 
-        // Reset form and redirect
         setFormData(initialState);
         router.push("/");
       }

@@ -1,10 +1,5 @@
-import React from 'react'
-import POSPage from './template'
-
 const Pos = () => {
-    return (
-        <POSPage />
-    )
-}
+  return <POSPage />;
+};
 
-export default Pos
+export default Pos;

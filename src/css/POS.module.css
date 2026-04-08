@@ -1,19 +1,19 @@
 .posContainer {
-  display: grid;
-  grid-template-columns: 1fr 380px;
   gap: 20px;
-  min-height: calc(100vh - 40px);
+  display: grid;
   padding: 20px;
+  min-height: calc(100vh - 40px);
+  grid-template-columns: 1fr 380px;
   background-color: var(--bg-color);
 }
 
 .leftSection {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
   background: var(--card-bg);
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
 }
 
 .scanHeader {
@@ -24,13 +24,12 @@
 .scanInput {
   width: 100%;
   padding: 15px;
+  outline: none;
+  font-size: 16px;
   border-radius: var(--radius);
   border: 2px solid var(--primary-color);
-  font-size: 16px;
-  outline: none;
 }
 
-/* Table */
 .cartTableWrapper {
   flex: 1;
   padding: 20px;
@@ -43,10 +42,10 @@
 }
 
 .cartTable th {
-  text-align: left;
   padding: 12px;
-  color: var(--text-muted);
   font-size: 13px;
+  text-align: left;
+  color: var(--text-muted);
   border-bottom: 2px solid var(--border-color);
 }
 
@@ -68,38 +67,37 @@
   color: var(--text-muted);
 }
 
-/* Quantity Fix */
 .qtyContainer {
+  gap: 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 .qtyControl {
-  display: flex;
-  align-items: center;
   gap: 5px;
-  background: #f9fafb;
   padding: 4px;
+  display: flex;
   border-radius: 6px;
   width: fit-content;
+  align-items: center;
+  background: #f9fafb;
 }
 
 .qtyControl button {
   width: 28px;
   height: 28px;
-  border: 1px solid var(--border-color);
-  background: white;
   cursor: pointer;
+  background: white;
   border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 .qtyInput {
   width: 50px;
-  text-align: center;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-weight: bold;
   padding: 4px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 .stockLabel {
@@ -108,47 +106,47 @@
 }
 
 .deleteBtn {
-  color: var(--error-color);
-  background: none;
-  border: 1px solid var(--error-color);
   width: 28px;
   height: 28px;
-  border-radius: 50%;
   cursor: pointer;
+  background: none;
+  border-radius: 50%;
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
 }
 
 .emptyMessageRow {
-  padding: 60px 0 !important;
   text-align: center;
+  padding: 60px 0 !important;
   border-bottom: none !important;
 }
 
 .emptyState {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   color: var(--text-muted);
 }
 
 .emptyIcon {
+  opacity: 0.5;
   font-size: 48px;
   margin-bottom: 10px;
-  opacity: 0.5;
 }
 
 .emptyState p {
   font-size: 16px;
   font-weight: 500;
 }
-/* Right Sidebar */
+
 .summaryCard {
-  background: var(--card-bg);
+  top: 10px;
   padding: 24px;
+  position: sticky;
+  background: var(--card-bg);
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  position: sticky;
-  top: 10px;
 }
 
 .summaryTitle {
@@ -157,13 +155,13 @@
 }
 .summaryRow {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 12px;
+  justify-content: space-between;
 }
 .divider {
   border: 0;
-  border-top: 1px solid var(--border-color);
   margin: 15px 0;
+  border-top: 1px solid var(--border-color);
 }
 .totalRow {
   font-size: 20px;
@@ -173,21 +171,20 @@
 
 .checkoutBtn {
   width: 100%;
-  padding: 15px;
-  background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: var(--radius);
-  font-weight: 700;
+  padding: 15px;
   cursor: pointer;
+  font-weight: 700;
   margin-top: 20px;
+  border-radius: var(--radius);
+  background: var(--primary-color);
 }
 
 .checkoutBtn:hover {
   background: var(--primary-hover);
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .posContainer {
     grid-template-columns: 1fr;
@@ -199,37 +196,33 @@
     display: none;
   }
   .cartTable tr {
+    padding: 10px;
     display: block;
-    border: 1px solid var(--border-color);
     margin-bottom: 15px;
     border-radius: 10px;
-    padding: 10px;
+    border: 1px solid var(--border-color);
   }
   .cartTable td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
     border: none;
+    display: flex;
+    padding: 8px 0;
+    justify-content: space-between;
   }
   .cartTable td::before {
-    content: attr(data-label);
     font-weight: 600;
     color: var(--text-muted);
+    content: attr(data-label);
   }
   .rightSection {
     margin-top: 20px;
   }
 }
 
-/* --- PRINT LOGIC --- */
-/* --- PRINT LOGIC --- */
-/* Ye class screen par hide rahegi */
 .printableBill {
   display: none;
 }
 
 @media print {
-  /* Print karte waqt sirf bill dikhega */
   body * {
     visibility: hidden;
   }
@@ -239,47 +232,42 @@
   }
 
   .printableBill {
-    display: block !important;
-    position: absolute;
-    /* Center alignment */
-    left: 50%;
-    transform: translateX(-50%);
     top: 0;
-
-    /* Bill width and spacing */
+    left: 50%;
     width: 80mm;
     padding: 5mm;
-    margin: 0 auto;
-
-    /* Text styling */
     color: black;
+    margin: 0 auto;
     background: white;
+    position: absolute;
+    display: block !important;
+    transform: translateX(-50%);
   }
 
   .billHeader {
     text-align: center;
-    border-bottom: 1px dashed #000;
     padding-bottom: 5px;
     margin-bottom: 10px;
+    border-bottom: 1px dashed #000;
   }
 
   .billTable {
     width: 100%;
-    border-collapse: collapse;
     margin: 10px 0;
+    border-collapse: collapse;
   }
 
   .billTable th,
   .billTable td {
     padding: 5px 0;
-    text-align: left;
     font-size: 12px;
+    text-align: left;
   }
 
   .billFooter {
+    margin-top: 10px;
+    padding-top: 10px;
     text-align: center;
     border-top: 1px dashed #000;
-    padding-top: 10px;
-    margin-top: 10px;
   }
 }

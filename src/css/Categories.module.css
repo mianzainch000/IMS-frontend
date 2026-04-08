@@ -1,53 +1,48 @@
-/* ================= CONTAINER ================= */
 .container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
   gap: 24px;
+  padding: 24px;
+  display: flex;
+  margin: 0 auto;
+  max-width: 1200px;
+  flex-direction: column;
 }
 
-/* ================= HEADER ================= */
 .header h1 {
-  font-size: clamp(20px, 5vw, 28px);
-  color: var(--text-main);
   margin-bottom: 4px;
+  color: var(--text-main);
+  font-size: clamp(20px, 5vw, 28px);
 }
 
 .header p {
-  color: var(--text-muted);
   font-size: 14px;
+  color: var(--text-muted);
 }
 
-/* ================= GRID ================= */
 .contentGrid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
   gap: 24px;
+  display: grid;
   align-items: start;
+  grid-template-columns: 1fr 1.5fr;
 }
 
-/* ================= CARDS ================= */
 .formCard,
 .listCard {
+  border-radius: 12px;
   background: var(--card-bg);
   padding: clamp(16px, 4vw, 24px);
-  border-radius: 12px;
   border: 1px solid var(--border-color);
 }
 
-/* ================= FORM ================= */
 .form {
   display: flex;
   flex-direction: column;
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
+  display: flex;
   margin-bottom: 16px;
+  flex-direction: column;
 }
 
 .inputGroup label {
@@ -56,31 +51,30 @@
 }
 
 .inputGroup input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-color);
-  color: var(--text-main);
   width: 100%;
-  box-sizing: border-box;
+  padding: 12px;
   outline: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: var(--text-main);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
 }
 
 .inputGroup input:focus {
   border-color: var(--primary-color);
 }
 
-/* ================= BUTTONS ================= */
 .addBtn {
   width: 100%;
-  padding: 12px;
-  background: var(--primary-color);
   color: white;
-  border-radius: 8px;
   border: none;
-  font-weight: 600;
+  padding: 12px;
   cursor: pointer;
+  font-weight: 600;
   transition: 0.2s;
+  border-radius: 8px;
+  background: var(--primary-color);
 }
 
 .addBtn:hover {
@@ -89,47 +83,44 @@
 
 .cancelBtn {
   width: 100%;
-  padding: 10px;
-  background: transparent;
-  color: var(--text-muted);
   border: none;
+  padding: 10px;
   margin-top: 8px;
   cursor: pointer;
   font-size: 13px;
+  background: transparent;
+  color: var(--text-muted);
   text-decoration: underline;
 }
 
-/* ================= LIST ================= */
 .list {
   display: flex;
   flex-direction: column;
 }
 
-/* LIST ITEM */
 .listItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border-color);
   gap: 12px;
+  display: flex;
+  padding: 16px 0;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .listItem:last-child {
   border-bottom: none;
 }
 
-/* CATEGORY INFO */
 .catInfo {
+  gap: 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .catName {
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-main);
-  font-size: 15px;
 }
 
 .catCount {
@@ -137,25 +128,23 @@
   color: var(--text-muted);
 }
 
-/* ================= ACTIONS ================= */
 .actions {
-  display: flex;
   gap: 8px;
-  flex-shrink: 0; /* prevent breaking */
+  display: flex;
+  flex-shrink: 0;
 }
 
 .editBtn,
 .deleteBtn {
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
   padding: 6px 12px;
   border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap; /* prevent wrap */
+  white-space: nowrap;
   transition: all 0.2s;
 }
 
-/* Edit */
 .editBtn {
   background: transparent;
   color: var(--primary-color);
@@ -163,11 +152,10 @@
 }
 
 .editBtn:hover {
-  background: var(--primary-color);
   color: white;
+  background: var(--primary-color);
 }
 
-/* Delete */
 .deleteBtn {
   background: transparent;
   color: var(--error-color);
@@ -175,26 +163,23 @@
 }
 
 .deleteBtn:hover {
-  background: var(--error-color);
   color: white;
+  background: var(--error-color);
 }
 
-/* ================= EMPTY ================= */
 .emptyMsg {
-  text-align: center;
   padding: 40px;
-  color: var(--text-muted);
+  text-align: center;
   font-style: italic;
+  color: var(--text-muted);
 }
 
-/* ================= TABLET ================= */
 @media (max-width: 1024px) {
   .contentGrid {
     grid-template-columns: 1fr;
   }
 }
 
-/* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .container {
     padding: 16px;
@@ -204,12 +189,11 @@
     text-align: center;
   }
 
-  /* Stack list item */
   .listItem {
-    flex-direction: column;
-    align-items: flex-start;
     gap: 12px;
     padding: 14px 0;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .actions {
@@ -218,11 +202,10 @@
   }
 }
 
-/* ================= SMALL MOBILE ================= */
 @media (max-width: 480px) {
   .actions {
-    flex-direction: column;
     width: 100%;
+    flex-direction: column;
   }
 
   .editBtn,

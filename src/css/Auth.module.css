@@ -7,9 +7,9 @@
 }
 
 .card {
-  max-width: 500px; /* Thora width barha diya Confirm Pass ke liye */
   width: 100%;
   padding: 40px;
+  max-width: 500px;
   border-radius: 16px;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -40,10 +40,9 @@
   display: flex;
 }
 
-/* FIX: Ensure inputs inside nameRow stay inside the card */
 .nameRow > div {
-  min-width: 0; /* Prevents overflow */
   flex: 1;
+  min-width: 0;
 }
 
 .passwordWrapper {
@@ -52,7 +51,7 @@
 }
 
 .eyeIcon {
-  top: 33px; /* Label ke size ke hisab se adjust karein */
+  top: 33px;
   right: 12px;
   z-index: 10;
   border: none;

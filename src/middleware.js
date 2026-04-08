@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-const publicPages = ["/", "/signup", "/login", "/forgotPassword", "/resetPassword"];
+const publicPages = [
+  "/",
+  "/signup",
+  "/login",
+  "/forgotPassword",
+  "/resetPassword",
+];
 const protectedPages = ["/home", "/products", "/categories", "/users"];
 export default function middleware(req) {
   const { pathname } = req.nextUrl;

@@ -5,7 +5,6 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const SnackbarContext = createContext();
 
 export const SnackbarProvider = ({ children }) => {
-  // Single snackbar states
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("error");
@@ -13,7 +12,6 @@ export const SnackbarProvider = ({ children }) => {
   const [position, setPosition] = useState("top-right");
   const [animation, setAnimation] = useState("slide-left");
 
-  // Multiple toasts
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
@@ -50,7 +48,7 @@ export const SnackbarProvider = ({ children }) => {
     <SnackbarContext.Provider value={showSnackbar}>
       {children}
 
-      {/* Toast containers */}
+      {}
       {["top-right", "top-left", "bottom-right", "bottom-left"].map((pos) => (
         <div key={pos} className={`${styles.toastContainer} ${styles[pos]}`}>
           {toasts

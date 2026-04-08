@@ -5,14 +5,13 @@ import { apiConfig } from "./apiConfig";
 const axiosClient = axios.create({
   baseURL: apiConfig.baseUrl,
   responseType: "json",
-  // ✅ Yeh zaroori hai taake Axios 403 ko error na banaye aur hum khud handle karein
+
   validateStatus: () => true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// --- 1. REQUEST INTERCEPTOR ---
 axiosClient.interceptors.request.use(async function (config) {
   const cookieStore = await cookies();
   const sessionInfo = cookieStore.get("sessionToken");

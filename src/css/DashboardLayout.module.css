@@ -7,17 +7,16 @@
 .mainContainer {
   flex: 1;
   display: flex;
-  flex-direction: column; /* Header upar aur content niche lane ke liye */
-  margin-left: 260px; /* Sidebar ki width ke barabar margin */
+  margin-left: 260px;
+  flex-direction: column;
   width: calc(100% - 260px);
 }
 
 .content {
-  padding: 24px;
   flex: 1;
+  padding: 24px;
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .mainContainer {
     margin-left: 80px;

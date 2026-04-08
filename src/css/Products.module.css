@@ -1,79 +1,75 @@
 .container {
-  display: flex;
-  flex-direction: column;
   gap: 24px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Header */
 .pageHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
   gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .pageHeader h1 {
   font-size: 24px;
-  color: var(--text-main);
   margin-bottom: 4px;
+  color: var(--text-main);
 }
 
 .pageHeader p {
-  color: var(--text-muted);
   font-size: 14px;
+  color: var(--text-muted);
 }
 
-/* Button */
 .addBtn {
-  background-color: var(--primary-color);
+  gap: 8px;
   color: white;
   border: none;
+  display: flex;
+  cursor: pointer;
+  font-weight: 600;
   padding: 10px 16px;
   border-radius: 8px;
-  display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  cursor: pointer;
   transition: opacity 0.2s;
+  background-color: var(--primary-color);
 }
 
 .addBtn:hover {
   opacity: 0.9;
 }
 
-/* Table Wrapper (IMPORTANT) */
 .tableCard {
-  background-color: var(--card-bg);
+  overflow-x: auto;
   border-radius: var(--radius);
+  background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  overflow-x: auto; /* 🔥 horizontal scroll */
 }
 
-/* Table */
 .table {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
-  min-width: 700px; /* 🔥 prevent squishing */
 }
 
 .table th {
-  text-align: left;
   padding: 16px;
-  background-color: var(--bg-color);
-  color: var(--text-muted);
   font-size: 13px;
+  text-align: left;
+  color: var(--text-muted);
   text-transform: uppercase;
+  background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
 }
 
 .table td {
   padding: 16px;
-  border-bottom: 1px solid var(--border-color);
   font-size: 14px;
   color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .productCell {
@@ -81,47 +77,45 @@
 }
 
 .catBadge {
-  background-color: var(--bg-color);
+  font-size: 12px;
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 12px;
+  background-color: var(--bg-color);
 }
 
 .lowStock {
-  color: var(--error-color);
   font-weight: 700;
+  color: var(--error-color);
 }
 
 .actionGroup {
-  display: flex;
   gap: 10px;
+  display: flex;
 }
 
-/* Buttons */
 .editBtn,
 .deleteBtn {
-  background: none;
-  border: 1px solid var(--border-color);
   padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
   display: flex;
+  cursor: pointer;
+  background: none;
+  border-radius: 6px;
   align-items: center;
-  color: var(--text-muted);
   transition: all 0.2s;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
 }
 
 .editBtn:hover {
-  border-color: var(--primary-color);
   color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .deleteBtn:hover {
-  border-color: var(--error-color);
   color: var(--error-color);
+  border-color: var(--error-color);
 }
 
-/* ---------------- MOBILE VIEW ---------------- */
 @media (max-width: 768px) {
   .pageHeader {
     flex-direction: column;
@@ -133,7 +127,6 @@
     justify-content: center;
   }
 
-  /* Convert table into cards */
   .table {
     min-width: 100%;
   }
@@ -143,26 +136,26 @@
   }
 
   .table tr {
+    padding: 12px;
     display: block;
-    background: var(--card-bg);
     margin-bottom: 12px;
     border-radius: 10px;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
-    padding: 12px;
   }
 
   .table td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
     border: none;
+    display: flex;
+    padding: 8px 0;
     font-size: 13px;
+    justify-content: space-between;
   }
 
   .table td::before {
-    content: attr(data-label);
     font-weight: 600;
     color: var(--text-muted);
+    content: attr(data-label);
   }
 
   .actionGroup {

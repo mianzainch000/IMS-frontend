@@ -23,19 +23,17 @@ export const authOptions = {
           if (res?.status === 200) {
             const { token, user } = res.data;
             const cookieStore = await cookies();
-            // route.js ke andar authorize function mein:
-            // user object ko pehle prepare karein taake role default "Staff" ho jaye
+
             const userWithRole = {
               ...user,
-              role: user.role || "Viewer" // Agar backend se role nahi aa raha toh "Staff" set ho jaye
+              role: user.role || "Viewer",
             };
 
-            // Ab isay cookie mein save karein
             cookieStore.set("user", JSON.stringify(userWithRole), {
-              maxAge: 24 * 60 * 60, // 24 hours
-              path: "/",            // Poori app mein access ke liye
-              secure: true,         // HTTPS ke liye zaroori hai
-              sameSite: "lax"
+              maxAge: 24 * 60 * 60,
+              path: "/",
+              secure: true,
+              sameSite: "lax",
             });
             cookieStore.set("sessionToken", token, {
               secure: true,

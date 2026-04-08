@@ -1,11 +1,5 @@
-import React from 'react'
-import CategoriesPage from './template'
-
-
 const Categories = () => {
-    return (
-        <CategoriesPage />
-    )
-}
+  return <CategoriesPage />;
+};
 
-export default Categories
+export default Categories;

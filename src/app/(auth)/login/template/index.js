@@ -22,7 +22,6 @@ export default function LoginPage() {
   });
   const [errors, setErrors] = useState({});
 
-  // SVG Icons
   const EyeOpen = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,13 +77,13 @@ export default function LoginPage() {
       const res = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: false, // Taake hum khud alert dikha saken
+        redirect: false,
       });
 
       if (res?.ok) {
         showAlert({ message: "✅ Login successful", type: "success" });
         setFormData({ email: "", password: "" });
-        router.push("/home"); // Redirect to dashboard/home
+        router.push("/home");
       } else {
         showAlert({
           message: `❌ ${res?.error || "Invalid credentials"}`,
