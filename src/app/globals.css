@@ -26,3 +26,11 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.5;
 }
+
+.accessDenied {
+  color: var(--error-color);
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 50px;
+  font-weight: bold;
+}

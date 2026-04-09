@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import styles from "@/css/Sidebar.module.css";
 import { useSnackbar } from "@/components/Snackbar";
 import ConfirmModal from "@/components/ConfirmModal";
+import { useAuth } from "@/hooks/useAuth";
 
 const Icons = {
   Dashboard: () => (
@@ -95,6 +96,23 @@ const Icons = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
     </svg>
   ),
+  Reports: () => (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" y1="21" x2="4" y2="10"></line>
+      <line x1="10" y1="21" x2="10" y2="4"></line>
+      <line x1="16" y1="21" x2="16" y2="14"></line>
+      <line x1="22" y1="21" x2="22" y2="8"></line>
+    </svg>
+  ),
   Logout: () => (
     <svg
       width="20"
@@ -116,18 +134,35 @@ const Icons = {
 const Sidebar = () => {
   const pathname = usePathname();
   const showAlert = useSnackbar();
+  const { role, user } = useAuth();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  if (!user) return null; // Don't render if no user
 
-  const menuItems = [
+  const adminOnlyMenu = [
+    { name: "Users", icon: <Icons.Users />, path: "/users" },
+    { name: "Reports", icon: <Icons.Reports />, path: "/reports" },
+  ];
+
+  const adminEditorMenu = [
     { name: "Dashboard", icon: <Icons.Dashboard />, path: "/home" },
     { name: "Products", icon: <Icons.Package />, path: "/products" },
     { name: "Categories", icon: <Icons.Categories />, path: "/categories" },
-    { name: "Pos", icon: <Icons.Users />, path: "/pos" },
-    { name: "Reports", icon: <Icons.Users />, path: "/reports" },
-
-    { name: "Users", icon: <Icons.Users />, path: "/users" },
+    { name: "POS", icon: <Icons.POS />, path: "/pos" },
   ];
+
+  const viewerMenu = [
+    { name: "Dashboard", icon: <Icons.Dashboard />, path: "/home" },
+  ];
+  // Combine menus based on role
+  let menuItems = [];
+  if (role.toLowerCase() === "admin") {
+    menuItems = [...adminEditorMenu, ...adminOnlyMenu]; // Admin sees all
+  } else if (role.toLowerCase() === "editor") {
+    menuItems = adminEditorMenu; // Editor sees editor/admin items
+  } else if (role.toLowerCase() === "viewer") {
+    menuItems = viewerMenu; // Viewer sees only dashboard
+  }
 
   const handleLogout = () => {
     deleteCookie("sessionToken");

@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 
-const PermissionWrapper = ({ children, allowedRoles }) => {
+const PermissionWrapper = ({ children, allowedRoles, fallback = null }) => {
   const { role, user } = useAuth();
 
   if (!user) return null;
@@ -10,7 +10,8 @@ const PermissionWrapper = ({ children, allowedRoles }) => {
     (r) => r.toLowerCase().trim() === role.toLowerCase().trim(),
   );
 
-  return isAllowed ? <>{children}</> : null;
+  // Return children if allowed, otherwise return fallback
+  return isAllowed ? <>{children}</> : <>{fallback}</>;
 };
 
 export default PermissionWrapper;

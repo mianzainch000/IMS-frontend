@@ -9,6 +9,7 @@ import { useState, useEffect, useMemo } from "react";
 import { handleGlobalLogout } from "@/utils/autoLogout";
 import { useSearchParams, useRouter } from "next/navigation";
 import handleAxiosError from "@/components/HandleAxiosError";
+import PermissionWrapper from "@/components/PermissionWrapper";
 
 const StatIcons = {
   Box: () => (
@@ -195,7 +196,7 @@ const HomePage = () => {
         <p>Welcome back! Check your inventory status.</p>
       </div>
 
-      {}
+      { }
       {filteredAlerts.length > 0 && (
         <div className={styles.notificationArea}>
           <div className={styles.alertHeader}>
@@ -218,7 +219,7 @@ const HomePage = () => {
         </div>
       )}
 
-      {}
+      { }
       <div className={styles.statsGrid}>
         {stats.map((item, index) => (
           <div key={index} className={styles.card}>
@@ -236,13 +237,15 @@ const HomePage = () => {
         ))}
       </div>
 
-      {}
+      { }
       <div className={styles.recentSection}>
         <div className={styles.tableHeader}>
           <h2>Recent Updates</h2>
-          <Link href="/products" className={styles.viewAllBtn}>
-            View All
-          </Link>
+          <PermissionWrapper allowedRoles={["Admin", "Editor"]}>
+            <Link href="/products" className={styles.viewAllBtn}>
+              View All
+            </Link>
+          </PermissionWrapper >
         </div>
 
         <div className={styles.tableWrapper}>
