@@ -44,7 +44,6 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
-
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [productIdToDelete, setProductIdToDelete] = useState(null);
 

@@ -19,10 +19,19 @@ const POSPage = () => {
 
   const subtotal = useMemo(() => {
     return cart.reduce(
-      (acc, item) => acc + item.price * (Number(item.quantity) || 0),
+      (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0),
       0,
     );
   }, [cart]);
+
+  // --- Naya function Price change ke liye ---
+  const handlePriceChange = (id, newPrice) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item._id === id ? { ...item, price: newPrice } : item
+      )
+    );
+  };
 
   const getCurrentDateTime = () => {
     const now = new Date();
@@ -118,7 +127,12 @@ const POSPage = () => {
     setLoading(true);
     try {
       const payload = {
-        items: cart.map((i) => ({ _id: i._id, quantity: Number(i.quantity) })),
+        // Checkout mein edited price bhejna zaroori hai
+        items: cart.map((i) => ({
+          _id: i._id,
+          quantity: Number(i.quantity),
+          price: Number(i.price) // Edited price bhej rahe hain
+        })),
       };
       const res = await axios.post("/pos/api", payload);
       showSnackbar({
@@ -166,7 +180,7 @@ const POSPage = () => {
             <thead>
               <tr>
                 <th>Product Details</th>
-                <th>Price</th>
+                <th>Price (Edit)</th>
                 <th>Qty</th>
                 <th>Total</th>
                 <th></th>
@@ -182,7 +196,18 @@ const POSPage = () => {
                         <span className={styles.pSku}>{item.sku}</span>
                       </div>
                     </td>
-                    <td data-label="Price">Rs. {item.price}</td>
+                    {/* --- Price editable yahan hai --- */}
+                    <td data-label="Price">
+                      <div className={styles.priceEditInputWrapper}>
+                        <span>Rs.</span>
+                        <input
+                          type="number"
+                          className={styles.editablePriceInput}
+                          value={item.price}
+                          onChange={(e) => handlePriceChange(item._id, e.target.value)}
+                        />
+                      </div>
+                    </td>
                     <td data-label="Quantity">
                       <div className={styles.qtyContainer}>
                         <div className={styles.qtyControl}>
@@ -223,7 +248,7 @@ const POSPage = () => {
                       </div>
                     </td>
                     <td data-label="Total">
-                      Rs. {item.price * (item.quantity || 0)}
+                      Rs. {(Number(item.price) || 0) * (Number(item.quantity) || 0)}
                     </td>
                     <td data-label="Action">
                       <button
@@ -276,7 +301,6 @@ const POSPage = () => {
         </div>
       </div>
 
-      {}
       <div className={styles.printableBill}>
         <div className={styles.billHeader}>
           <h2>MERA STORE</h2>
@@ -297,7 +321,7 @@ const POSPage = () => {
               <tr key={i}>
                 <td>{item.name}</td>
                 <td>{item.quantity}</td>
-                <td>{item.price * item.quantity}</td>
+                <td>{(Number(item.price) || 0) * (Number(item.quantity) || 0)}</td>
               </tr>
             ))}
           </tbody>

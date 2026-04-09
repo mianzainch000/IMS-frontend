@@ -185,6 +185,55 @@
   background: var(--primary-hover);
 }
 
+/* Price Wrapper and Editable Input Styling */
+.priceEditInputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-color); /* Light gray from global */
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 5px 10px;
+  max-width: 120px;
+  transition: all 0.2s ease-in-out;
+}
+
+.priceEditInputWrapper:focus-within {
+  border-color: var(--primary-color); /* Blue from global */
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.priceEditInputWrapper span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 5px;
+  user-select: none;
+}
+
+.editablePriceInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  outline: none;
+  padding: 0;
+}
+
+/* Chrome, Safari, Edge se arrows khatam karne ke liye */
+.editablePriceInput::-webkit-outer-spin-button,
+.editablePriceInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.editablePriceInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
 @media (max-width: 1024px) {
   .posContainer {
     grid-template-columns: 1fr;
