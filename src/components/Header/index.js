@@ -46,7 +46,7 @@ const Header = ({ user }) => {
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
-  const hideSearchOn = ["/reports", "/pos"];
+  const hideSearchOn = ["/categories", "/reports", "/pos"];
   const shouldShowSearch = !hideSearchOn.includes(pathname);
 
   const handleSearch = (e) => {
@@ -65,7 +65,7 @@ const Header = ({ user }) => {
 
   return (
     <header className={styles.header}>
-      {}
+      { }
       <div className={styles.leftSection}>
         {shouldShowSearch ? (
           <div className={styles.searchWrapper}>
@@ -82,13 +82,13 @@ const Header = ({ user }) => {
           </div>
         ) : (
           <div className={styles.pageTitle}>
-            {}
+            { }
             <h2> Overview</h2>
           </div>
         )}
       </div>
 
-      {}
+      { }
       <div className={styles.actions}>
         <div className={styles.notificationBell}>
           <BellIcon />
