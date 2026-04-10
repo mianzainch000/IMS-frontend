@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { apiConfig } from "@/config/apiConfig";
 import axiosClient from "@/config/axiosClient";
 import CredentialsProvider from "next-auth/providers/credentials";
+
 export const authOptions = {
   providers: [
     CredentialsProvider({

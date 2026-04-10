@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import styles from "@/css/Sidebar.module.css";
 import { useSnackbar } from "@/components/Snackbar";
 import ConfirmModal from "@/components/ConfirmModal";
-import { useAuth } from "@/hooks/useAuth";
 
 const Icons = {
   Dashboard: () => (
@@ -137,7 +137,7 @@ const Sidebar = () => {
   const { role, user } = useAuth();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  if (!user) return null; // Don't render if no user
+  if (!user) return null;
 
   const adminOnlyMenu = [
     { name: "Users", icon: <Icons.Users />, path: "/users" },
@@ -154,14 +154,14 @@ const Sidebar = () => {
   const viewerMenu = [
     { name: "Dashboard", icon: <Icons.Dashboard />, path: "/home" },
   ];
-  // Combine menus based on role
+
   let menuItems = [];
   if (role.toLowerCase() === "admin") {
-    menuItems = [...adminEditorMenu, ...adminOnlyMenu]; // Admin sees all
+    menuItems = [...adminEditorMenu, ...adminOnlyMenu];
   } else if (role.toLowerCase() === "editor") {
-    menuItems = adminEditorMenu; // Editor sees editor/admin items
+    menuItems = adminEditorMenu;
   } else if (role.toLowerCase() === "viewer") {
-    menuItems = viewerMenu; // Viewer sees only dashboard
+    menuItems = viewerMenu;
   }
 
   const handleLogout = () => {
@@ -198,7 +198,7 @@ const Sidebar = () => {
             className={styles.logoutBtn}
             onClick={() => setIsModalOpen(true)}
           >
-            { }
+            {}
             <span className={styles.icon}>
               <Icons.Logout />
             </span>
@@ -207,7 +207,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      { }
+      {}
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

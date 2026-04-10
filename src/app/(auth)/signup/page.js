@@ -1,5 +1,6 @@
 import React from "react";
 import Signup from "./template";
+
 const SignupForm = () => {
   return <Signup />;
 };

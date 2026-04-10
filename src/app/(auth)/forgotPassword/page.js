@@ -1,5 +1,6 @@
 import React from "react";
 import ForgotPassword from "./template";
+
 const ForgotPasswordForm = () => {
   return <ForgotPassword />;
 };

@@ -1,4 +1,4 @@
-import HomePage from "./template"
+import HomePage from "./template";
 
 const Dashboard = () => {
   return <HomePage />;

@@ -1,5 +1,6 @@
 import React from "react";
 import LoginForm from "./template";
+
 const LoginFormPage = () => {
   return <LoginForm />;
 };

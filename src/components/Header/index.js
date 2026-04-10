@@ -65,7 +65,7 @@ const Header = ({ user }) => {
 
   return (
     <header className={styles.header}>
-      {/* Search Bar: Condition ke mutabiq render hogi */}
+      {}
       <div className={styles.leftSection}>
         {shouldShowSearch ? (
           <div className={styles.searchWrapper}>
@@ -82,14 +82,13 @@ const Header = ({ user }) => {
           </div>
         ) : (
           <div className={styles.pageTitle}>
-            {/* Jab search na ho toh Page ka context dikhao */}
+            {}
             <h2> Overview</h2>
           </div>
-
         )}
       </div>
 
-      {/* User Actions Section */}
+      {}
       <div className={styles.actions}>
         <div className={styles.notificationBell}>
           <BellIcon />
@@ -98,7 +97,9 @@ const Header = ({ user }) => {
 
         <div className={styles.userProfile}>
           <div className={styles.userInfo}>
-            <span className={styles.userName}>{user?.name || "Zain Ishfaq"}</span>
+            <span className={styles.userName}>
+              {user?.name || "Zain Ishfaq"}
+            </span>
             <span className={styles.userRole}>{user?.role || "Admin"}</span>
           </div>
           <div className={styles.avatar}>{userInitial}</div>

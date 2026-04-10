@@ -168,26 +168,23 @@
 }
 
 .cancelEditBtn {
-  padding: 8px 16px;
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
   width: 100%;
+  cursor: pointer;
+  font-weight: 500;
   margin-top: 10px;
-
-  /* Outline Style - Taki main action button se halka lage */
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
   background-color: transparent;
   border: 1px solid var(--border-color);
-  color: var(--text-muted);
 }
 
 .cancelEditBtn:hover {
-  /* Hover par error color ka halka touch (Taake cancel feel ho) */
-  background-color: #fef2f2; /* Light red bg */
-  border-color: var(--error-color);
+  background-color: #fef2f2;
   color: var(--error-color);
+  border-color: var(--error-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 

@@ -5,6 +5,7 @@ import styles from "@/css/Users.module.css";
 import { useSearchParams } from "next/navigation";
 import { useSnackbar } from "@/components/Snackbar";
 import { useState, useEffect, useMemo } from "react";
+import { handleGlobalLogout } from "@/utils/autoLogout";
 import handleAxiosError from "@/components/HandleAxiosError";
 
 const UsersPage = () => {
@@ -29,8 +30,13 @@ const UsersPage = () => {
       const res = await axios.get("/users/api");
       setUsers(res.data || []);
     } catch (error) {
-      const { message } = handleAxiosError(error);
-      showSnackbar({ message, type: "error" });
+      if (error.response?.status === 403) {
+        handleGlobalLogout();
+      } else {
+        const { message } = handleAxiosError(error);
+        showSnackbar({ message, type: "error" });
+      }
+
     } finally {
       setLoading(false);
     }
@@ -227,7 +233,7 @@ const UsersPage = () => {
         </table>
       </div>
 
-      {}
+      { }
       {resetModal.show && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>

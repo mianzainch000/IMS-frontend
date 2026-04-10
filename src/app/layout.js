@@ -1,6 +1,7 @@
 import "./globals.css";
 import Provider from "@/components/Provider";
 import { Inter, Roboto_Mono } from "next/font/google";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

@@ -10,7 +10,6 @@ const PermissionWrapper = ({ children, allowedRoles, fallback = null }) => {
     (r) => r.toLowerCase().trim() === role.toLowerCase().trim(),
   );
 
-  // Return children if allowed, otherwise return fallback
   return isAllowed ? <>{children}</> : <>{fallback}</>;
 };
 

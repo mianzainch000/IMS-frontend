@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import NextTopLoader from "nextjs-toploader";
 import { SnackbarProvider } from "@/components/Snackbar";
+
 export default function Provider({ children }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {

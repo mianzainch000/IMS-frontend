@@ -3,8 +3,10 @@ import axios from "axios";
 import Loader from "@/components/Loader";
 import styles from "@/css/POS.module.css";
 import { useSnackbar } from "@/components/Snackbar";
+import { handleGlobalLogout } from "@/utils/autoLogout";
 import { useState, useRef, useEffect, useMemo } from "react";
 import handleAxiosError from "@/components/HandleAxiosError";
+
 
 const POSPage = () => {
   const [cart, setCart] = useState([]);
@@ -19,17 +21,17 @@ const POSPage = () => {
 
   const subtotal = useMemo(() => {
     return cart.reduce(
-      (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+      (acc, item) =>
+        acc + (Number(item.price) || 0) * (Number(item.quantity) || 0),
       0,
     );
   }, [cart]);
 
-  // --- Naya function Price change ke liye ---
   const handlePriceChange = (id, newPrice) => {
     setCart((prev) =>
       prev.map((item) =>
-        item._id === id ? { ...item, price: newPrice } : item
-      )
+        item._id === id ? { ...item, price: newPrice } : item,
+      ),
     );
   };
 
@@ -111,10 +113,12 @@ const POSPage = () => {
           setSkuInput("");
         }
       } catch (error) {
-        showSnackbar({
-          message: handleAxiosError(error).message,
-          type: "error",
-        });
+        if (error.response?.status === 403) {
+          handleGlobalLogout();
+        } else {
+          const { message } = handleAxiosError(error);
+          showSnackbar({ message, type: "error" });
+        }
         setSkuInput("");
       } finally {
         setLoading(false);
@@ -127,11 +131,10 @@ const POSPage = () => {
     setLoading(true);
     try {
       const payload = {
-        // Checkout mein edited price bhejna zaroori hai
         items: cart.map((i) => ({
           _id: i._id,
           quantity: Number(i.quantity),
-          price: Number(i.price) // Edited price bhej rahe hain
+          price: Number(i.price),
         })),
       };
       const res = await axios.post("/pos/api", payload);
@@ -196,7 +199,7 @@ const POSPage = () => {
                         <span className={styles.pSku}>{item.sku}</span>
                       </div>
                     </td>
-                    {/* --- Price editable yahan hai --- */}
+                    { }
                     <td data-label="Price">
                       <div className={styles.priceEditInputWrapper}>
                         <span>Rs.</span>
@@ -204,7 +207,9 @@ const POSPage = () => {
                           type="number"
                           className={styles.editablePriceInput}
                           value={item.price}
-                          onChange={(e) => handlePriceChange(item._id, e.target.value)}
+                          onChange={(e) =>
+                            handlePriceChange(item._id, e.target.value)
+                          }
                         />
                       </div>
                     </td>
@@ -248,7 +253,8 @@ const POSPage = () => {
                       </div>
                     </td>
                     <td data-label="Total">
-                      Rs. {(Number(item.price) || 0) * (Number(item.quantity) || 0)}
+                      Rs.{" "}
+                      {(Number(item.price) || 0) * (Number(item.quantity) || 0)}
                     </td>
                     <td data-label="Action">
                       <button
@@ -321,7 +327,9 @@ const POSPage = () => {
               <tr key={i}>
                 <td>{item.name}</td>
                 <td>{item.quantity}</td>
-                <td>{(Number(item.price) || 0) * (Number(item.quantity) || 0)}</td>
+                <td>
+                  {(Number(item.price) || 0) * (Number(item.quantity) || 0)}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -1,14 +1,15 @@
-import PermissionWrapper from "@/components/PermissionWrapper";
 import ProductsPage from "./template";
+import PermissionWrapper from "@/components/PermissionWrapper";
+
 const PrdocutPage = () => {
   return (
     <PermissionWrapper
       allowedRoles={["Admin", "Editor"]}
       fallback={<p className="accessDenied">Only Admin & Editor Access</p>}
     >
-      <ProductsPage />;
+      <ProductsPage />
     </PermissionWrapper>
-  )
+  );
 };
 
 export default PrdocutPage;

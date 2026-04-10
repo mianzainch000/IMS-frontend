@@ -12,13 +12,12 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  // Initial state mein costPrice add kar di hai
   const initialState = {
     name: "",
     sku: "",
     category: "",
-    price: "",      // Selling Price
-    costPrice: "",  // Purchase Price (Profit calculation ke liye)
+    price: "",
+    costPrice: "",
     stock: "",
   };
 
@@ -48,7 +47,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
         sku: productToEdit.sku || "",
         category: productToEdit.category || "",
         price: productToEdit.price || "",
-        costPrice: productToEdit.costPrice || "", // Edit ke waqt purani cost price load hogi
+        costPrice: productToEdit.costPrice || "",
         stock: productToEdit.stock || "",
       });
     } else {
@@ -102,7 +101,16 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
         <div className={styles.modalHeader}>
           <h2>{productToEdit ? "Edit Product" : "Add New Product"}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -145,17 +153,21 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
               onChange={handleChange}
               required
             >
-              <option value="" disabled>Select a category</option>
+              <option value="" disabled>
+                Select a category
+              </option>
               {categories.map((cat) => (
-                <option key={cat._id} value={cat.name}>{cat.name}</option>
+                <option key={cat._id} value={cat.name}>
+                  {cat.name}
+                </option>
               ))}
             </select>
           </div>
 
-          {/* Price aur Cost Price ki Row - Responsive Design */}
+          { }
           <div className={styles.row}>
             <div className={styles.formGroup} style={{ flex: 1 }}>
-              <label>Cost Price (Khareed)</label>
+              <label>Cost Price</label>
               <input
                 name="costPrice"
                 type="number"
@@ -167,7 +179,7 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
               />
             </div>
             <div className={styles.formGroup} style={{ flex: 1 }}>
-              <label>Sale Price (Bechna)</label>
+              <label>Sale Price </label>
               <input
                 name="price"
                 type="number"
@@ -194,7 +206,11 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
           </div>
 
           <div className={styles.modalFooter}>
-            <button type="button" className={styles.cancelBtn} onClick={onClose}>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={onClose}
+            >
               Cancel
             </button>
             <button
@@ -202,7 +218,11 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
               className={styles.saveBtn}
               disabled={loading || categories.length === 0}
             >
-              {loading ? "Saving..." : productToEdit ? "Update Changes" : "Save Product"}
+              {loading
+                ? "Saving..."
+                : productToEdit
+                  ? "Update Changes"
+                  : "Save Product"}
             </button>
           </div>
         </form>

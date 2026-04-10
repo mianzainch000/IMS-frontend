@@ -3,7 +3,6 @@ import axios from "axios";
 import Link from "next/link";
 import Loader from "@/components/Loader";
 import styles from "@/css/Home.module.css";
-import { deleteCookie } from "cookies-next";
 import { useSnackbar } from "@/components/Snackbar";
 import { useState, useEffect, useMemo } from "react";
 import { handleGlobalLogout } from "@/utils/autoLogout";
@@ -245,7 +244,7 @@ const HomePage = () => {
             <Link href="/products" className={styles.viewAllBtn}>
               View All
             </Link>
-          </PermissionWrapper >
+          </PermissionWrapper>
         </div>
 
         <div className={styles.tableWrapper}>
