@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 import { useSnackbar } from "@/components/Snackbar";
 import { handleGlobalLogout } from "@/utils/autoLogout";
 
-
 const ProfitLossPage = () => {
   const showSnackbar = useSnackbar();
   const [loading, setLoading] = useState(true);
@@ -42,29 +41,43 @@ const ProfitLossPage = () => {
     const groups = data.recentSales.reduce((acc, sale) => {
       const dateStr =
         sale.date || new Date(sale.createdAt).toLocaleDateString("en-GB");
-      const productKey = sale.productNames;
-      const key = `${dateStr}-${productKey}`;
 
-      if (!acc[key]) {
-        acc[key] = {
-          ...sale,
-          date: dateStr,
-          totalAmount: 0,
-          totalProfit: 0,
-          totalQty: 0,
-          totalDiscount: 0,
-        };
-      }
+      const productsArray = sale.productNames.split(", ");
+      const itemCount = productsArray.length;
 
-      acc[key].totalAmount += sale.totalAmount || 0;
-      acc[key].totalProfit += sale.totalProfit || 0;
-      acc[key].totalQty += sale.totalQty || 0;
-      acc[key].totalDiscount += sale.totalDiscount || 0;
+      productsArray.forEach((productName) => {
+        const name = productName.trim();
+        const key = `${dateStr}-${name}`;
+
+        if (!acc[key]) {
+          acc[key] = {
+            _id: `${sale._id}-${name}`,
+            date: dateStr,
+            productNames: name,
+            totalAmount: 0,
+            totalProfit: 0,
+            totalQty: 0,
+            totalDiscount: 0,
+          };
+        }
+
+        acc[key].totalAmount += Math.round(sale.totalAmount / itemCount);
+        acc[key].totalProfit += Math.round(sale.totalProfit / itemCount);
+        acc[key].totalQty += Math.round(sale.totalQty / itemCount);
+        acc[key].totalDiscount += Math.round(
+          (sale.totalDiscount || 0) / itemCount,
+        );
+      });
 
       return acc;
     }, {});
 
-    return Object.values(groups);
+    return Object.values(groups).sort((a, b) => {
+      return (
+        new Date(b.date.split("/").reverse().join("-")) -
+        new Date(a.date.split("/").reverse().join("-"))
+      );
+    });
   };
 
   const aggregatedSales = getAggregatedSales();
