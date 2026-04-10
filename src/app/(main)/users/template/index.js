@@ -80,16 +80,15 @@ const UsersPage = () => {
         showSnackbar({
           message: res.data?.message || "Updated successfully!",
           type: "success",
-          duration: 1000,
+          // duration: 1000,
         });
         loadUsers();
-      } else {
-        showSnackbar({
-          message: res.data?.message || "Update failed",
-          type: "error",
-        });
       }
     } catch (error) {
+      if (error.response?.status === 403) {
+        handleGlobalLogout();
+        return;
+      }
       const { message } = handleAxiosError(error);
       showSnackbar({ message, type: "error" });
     } finally {
