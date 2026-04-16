@@ -1,0 +1,25 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.mainContainer {
+  flex: 1;
+  display: flex;
+  margin-left: 260px;
+  flex-direction: column;
+  width: calc(100% - 260px);
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+}

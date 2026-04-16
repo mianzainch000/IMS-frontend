@@ -1,0 +1,415 @@
+.posContainer {
+  gap: 20px;
+  display: grid;
+  padding: 20px;
+  min-height: calc(100vh - 40px);
+  grid-template-columns: 1fr 380px;
+  background-color: var(--bg-color);
+}
+
+.leftSection {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.scanHeader {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.scanInput {
+  width: 100%;
+  padding: 15px;
+  outline: none;
+  font-size: 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--primary-color);
+}
+
+.cartTableWrapper {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.cartTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cartTable th {
+  padding: 12px;
+  font-size: 13px;
+  text-align: left;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.cartTable td {
+  padding: 15px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.productCell {
+  display: flex;
+  flex-direction: column;
+}
+.pName {
+  font-weight: 600;
+  color: var(--text-main);
+}
+.pSku {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.qtyContainer {
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.qtyControl {
+  gap: 5px;
+  padding: 4px;
+  display: flex;
+  border-radius: 6px;
+  width: fit-content;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.qtyControl button {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.qtyInput {
+  width: 50px;
+  padding: 4px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.stockLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.deleteBtn {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  background: none;
+  border-radius: 50%;
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
+}
+
+.emptyMessageRow {
+  text-align: center;
+  padding: 60px 0 !important;
+  border-bottom: none !important;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.emptyIcon {
+  opacity: 0.5;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.emptyState p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.summaryCard {
+  top: 10px;
+  padding: 24px;
+  position: sticky;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.summaryTitle {
+  margin-bottom: 20px;
+  color: var(--text-main);
+}
+.summaryRow {
+  display: flex;
+  margin-bottom: 12px;
+  justify-content: space-between;
+}
+.divider {
+  border: 0;
+  margin: 15px 0;
+  border-top: 1px solid var(--border-color);
+}
+.totalRow {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.receivedWrapper {
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+
+.receivedLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+}
+
+.receivedInput {
+  width: 100%;
+  outline: none;
+  font-size: 15px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  color: var(--text-main);
+  background: var(--bg-color);
+  border-radius: var(--radius);
+  transition: border-color 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.receivedInput:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.paymentCards {
+  gap: 8px;
+  display: grid;
+  margin-bottom: 4px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.payCard {
+  gap: 4px;
+  display: flex;
+  padding: 10px 12px;
+  flex-direction: column;
+  background: var(--bg-color);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.payCardLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.payCardValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.paySuccess {
+  color: var(--success-color);
+}
+
+.payDanger {
+  color: var(--error-color);
+}
+
+.checkoutBtn {
+  width: 100%;
+  color: white;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 16px;
+  transition: background 0.2s;
+  border-radius: var(--radius);
+  background: var(--primary-color);
+}
+
+.checkoutBtn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.checkoutBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.priceEditInputWrapper {
+  display: flex;
+  max-width: 120px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+}
+
+.priceEditInputWrapper:focus-within {
+  background-color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.priceEditInputWrapper span {
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 5px;
+  user-select: none;
+  color: var(--text-muted);
+}
+
+.editablePriceInput {
+  padding: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text-main);
+}
+
+.editablePriceInput::-webkit-outer-spin-button,
+.editablePriceInput::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.editablePriceInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.receivedInput.inputError {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.receivedHint {
+  font-size: 12px;
+  margin-top: 5px;
+  min-height: 18px;
+}
+
+.receivedHint.hintError {
+  color: var(--error-color);
+}
+
+.receivedHint.hintSuccess {
+  color: var(--success-color);
+}
+
+@media (max-width: 1024px) {
+  .posContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .cartTable thead {
+    display: none;
+  }
+  .cartTable tr {
+    padding: 10px;
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+  }
+  .cartTable td {
+    border: none;
+    display: flex;
+    padding: 8px 0;
+    justify-content: space-between;
+  }
+  .cartTable td::before {
+    font-weight: 600;
+    color: var(--text-muted);
+    content: attr(data-label);
+  }
+  .rightSection {
+    margin-top: 20px;
+  }
+  .paymentCards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.printableBill {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printableBill,
+  .printableBill * {
+    visibility: visible;
+  }
+
+  .printableBill {
+    top: 0;
+    left: 50%;
+    width: 80mm;
+    padding: 5mm;
+    color: black;
+    margin: 0 auto;
+    background: white;
+    position: absolute;
+    display: block !important;
+    transform: translateX(-50%);
+  }
+
+  .billHeader {
+    text-align: center;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #000;
+  }
+
+  .billTable {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+  }
+
+  .billTable th,
+  .billTable td {
+    padding: 5px 0;
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .billFooter {
+    margin-top: 10px;
+    padding-top: 10px;
+    text-align: center;
+    border-top: 1px dashed #000;
+  }
+}

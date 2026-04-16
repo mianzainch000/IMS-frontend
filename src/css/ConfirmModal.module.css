@@ -1,0 +1,129 @@
+.overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 2000;
+  padding: 16px;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  background: var(--card-bg);
+  padding: 32px 24px 24px 24px;
+  border-radius: var(--radius);
+  animation: modalFadeIn 0.2s ease-out;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.closeBtn {
+  top: 12px;
+  right: 12px;
+  border: none;
+  padding: 5px;
+  display: flex;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 50%;
+  align-items: center;
+  transition: all 0.2s;
+  background: transparent;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.closeBtn:hover {
+  color: var(--text-main);
+  background: var(--bg-color);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--text-main);
+}
+
+.body p {
+  margin: 16px 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.footer {
+  gap: 12px;
+  display: flex;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.btn {
+  cursor: pointer;
+  min-width: 90px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
+}
+
+.cancelBtn {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-color);
+}
+
+.confirmBtnDanger {
+  border: none;
+  color: #ffffff;
+  background: var(--error-color);
+}
+
+.confirmBtnDanger:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.confirmBtnPrimary {
+  border: none;
+  color: #ffffff;
+  background: var(--primary-color);
+}
+
+@media (max-width: 480px) {
+  .footer {
+    gap: 10px;
+    flex-direction: column-reverse;
+  }
+  .btn {
+    width: 100%;
+    padding: 12px;
+  }
+}
