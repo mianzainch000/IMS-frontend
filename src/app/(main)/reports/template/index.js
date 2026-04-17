@@ -22,10 +22,8 @@ const ProfitLossPage = () => {
       if (error.response?.status === 403) {
         handleGlobalLogout();
       } else {
-        const { message } = handleAxiosError(error);
-        showSnackbar({ message, type: "error" });
+        showSnackbar({ message: error.message, type: "error" });
       }
-      console.error("Error fetching analytics:", error);
     } finally {
       setLoading(false);
     }
@@ -34,53 +32,6 @@ const ProfitLossPage = () => {
   useEffect(() => {
     fetchAnalytics(filter);
   }, [filter]);
-
-  const getAggregatedSales = () => {
-    if (!data.recentSales || data.recentSales.length === 0) return [];
-
-    const groups = data.recentSales.reduce((acc, sale) => {
-      const dateStr =
-        sale.date || new Date(sale.createdAt).toLocaleDateString("en-GB");
-
-      const productsArray = sale.productNames.split(", ");
-      const itemCount = productsArray.length;
-
-      productsArray.forEach((productName) => {
-        const name = productName.trim();
-        const key = `${dateStr}-${name}`;
-
-        if (!acc[key]) {
-          acc[key] = {
-            _id: `${sale._id}-${name}`,
-            date: dateStr,
-            productNames: name,
-            totalAmount: 0,
-            totalProfit: 0,
-            totalQty: 0,
-            totalDiscount: 0,
-          };
-        }
-
-        acc[key].totalAmount += Math.round(sale.totalAmount / itemCount);
-        acc[key].totalProfit += Math.round(sale.totalProfit / itemCount);
-        acc[key].totalQty += Math.round(sale.totalQty / itemCount);
-        acc[key].totalDiscount += Math.round(
-          (sale.totalDiscount || 0) / itemCount,
-        );
-      });
-
-      return acc;
-    }, {});
-
-    return Object.values(groups).sort((a, b) => {
-      return (
-        new Date(b.date.split("/").reverse().join("-")) -
-        new Date(a.date.split("/").reverse().join("-"))
-      );
-    });
-  };
-
-  const aggregatedSales = getAggregatedSales();
 
   const totalProfit = data.stats.totalProfit || 0;
   const totalCost = data.stats.totalCost || 0;
@@ -180,21 +131,20 @@ const ProfitLossPage = () => {
             </tr>
           </thead>
           <tbody>
-            {aggregatedSales.length > 0 ? (
-              aggregatedSales.map((sale, index) => {
+            {data.recentSales.length > 0 ? (
+              data.recentSales.map((sale, index) => {
                 const saleCost = sale.totalAmount - sale.totalProfit;
                 const saleMargin =
                   saleCost > 0
                     ? ((sale.totalProfit / saleCost) * 100).toFixed(1)
                     : 0;
-
                 const perPieceDiscount =
                   sale.totalQty > 0
                     ? (sale.totalDiscount / sale.totalQty).toFixed(0)
                     : 0;
 
                 return (
-                  <tr key={sale.id || index}>
+                  <tr key={index}>
                     <td>{sale.date}</td>
                     <td data-label="Products">{sale.productNames}</td>
                     <td
@@ -203,7 +153,6 @@ const ProfitLossPage = () => {
                     >
                       {sale.totalQty} pcs
                     </td>
-                    {}
                     <td data-label="Discount" style={{ color: "#e67e22" }}>
                       Rs. {sale.totalDiscount}
                       {sale.totalDiscount > 0 && (
