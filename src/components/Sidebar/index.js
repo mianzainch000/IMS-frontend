@@ -141,7 +141,7 @@ const Sidebar = () => {
 
   const adminOnlyMenu = [
     { name: "Users", icon: <Icons.Users />, path: "/users" },
-    { name: "Reports", icon: <Icons.Reports />, path: "/reports" },
+    { name: "Report", icon: <Icons.Reports />, path: "/report" },
   ];
 
   const adminEditorMenu = [
@@ -198,7 +198,7 @@ const Sidebar = () => {
             className={styles.logoutBtn}
             onClick={() => setIsModalOpen(true)}
           >
-            {}
+            { }
             <span className={styles.icon}>
               <Icons.Logout />
             </span>
@@ -207,7 +207,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      {}
+      { }
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

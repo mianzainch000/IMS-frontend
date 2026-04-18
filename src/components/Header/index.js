@@ -46,7 +46,7 @@ const Header = ({ user }) => {
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
-  const hideSearchOn = ["/categories", "/pos"];
+  const hideSearchOn = ["/categories", "/pos", "/report"];
   const shouldShowSearch = !hideSearchOn.includes(pathname);
 
   const handleSearch = (e) => {
