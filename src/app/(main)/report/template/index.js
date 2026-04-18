@@ -20,7 +20,7 @@ const ProfitLossPage = () => {
     setLoading(true);
     try {
       const query = `filter=${filter}&year=${year}&month=${month}`;
-      const res = await axios.get(`/reports/api?${query}`);
+      const res = await axios.get(`/report/api?${query}`);
       setData(res.data);
     } catch (error) {
       if (error.response?.status === 403) {
