@@ -168,7 +168,7 @@ const POSPage = () => {
     <div className={styles.posContainer} onClick={handleContainerClick}>
       {loading && <Loader />}
 
-      {}
+      { }
       <div className={styles.leftSection}>
         <div className={styles.scanHeader}>
           <input
@@ -287,7 +287,7 @@ const POSPage = () => {
         </div>
       </div>
 
-      {}
+      { }
       <div className={styles.rightSection}>
         <div className={styles.summaryCard}>
           <h3 className={styles.summaryTitle}>Order Summary</h3>
@@ -304,31 +304,29 @@ const POSPage = () => {
             </div>
           </div>
 
-          {}
+          { }
           <div className={styles.receivedWrapper}>
             <label className={styles.receivedLabel}>
               Customer nay diye (Rs.)
             </label>
             <input
               type="number"
-              className={`${styles.receivedInput} ${
-                receivedAmount !== "" && Number(receivedAmount) < subtotal
-                  ? styles.inputError
-                  : ""
-              }`}
+              className={`${styles.receivedInput} ${receivedAmount !== "" && Number(receivedAmount) < subtotal
+                ? styles.inputError
+                : ""
+                }`}
               placeholder="Amount enter karo..."
               value={receivedAmount}
               onChange={(e) => setReceivedAmount(e.target.value)}
               onClick={(e) => e.stopPropagation()}
             />
             <p
-              className={`${styles.receivedHint} ${
-                receivedAmount === ""
-                  ? ""
-                  : Number(receivedAmount) < subtotal
-                    ? styles.hintError
-                    : styles.hintSuccess
-              }`}
+              className={`${styles.receivedHint} ${receivedAmount === ""
+                ? ""
+                : Number(receivedAmount) < subtotal
+                  ? styles.hintError
+                  : styles.hintSuccess
+                }`}
             >
               {receivedAmount === ""
                 ? ""
@@ -346,9 +344,8 @@ const POSPage = () => {
             <div className={styles.payCard}>
               <span className={styles.payCardLabel}>Diye</span>
               <span
-                className={`${styles.payCardValue} ${
-                  receivedAmount !== "" ? styles.paySuccess : ""
-                }`}
+                className={`${styles.payCardValue} ${receivedAmount !== "" ? styles.paySuccess : ""
+                  }`}
               >
                 {receivedAmount !== "" ? `Rs. ${Number(receivedAmount)}` : "—"}
               </span>
@@ -356,13 +353,12 @@ const POSPage = () => {
             <div className={styles.payCard}>
               <span className={styles.payCardLabel}>Wapas karo</span>
               <span
-                className={`${styles.payCardValue} ${
-                  returnAmount !== null
-                    ? returnAmount >= 0
-                      ? styles.paySuccess
-                      : styles.payDanger
-                    : ""
-                }`}
+                className={`${styles.payCardValue} ${returnAmount !== null
+                  ? returnAmount >= 0
+                    ? styles.paySuccess
+                    : styles.payDanger
+                  : ""
+                  }`}
               >
                 {returnAmount !== null
                   ? returnAmount >= 0
@@ -378,9 +374,7 @@ const POSPage = () => {
             onClick={handleCheckout}
             disabled={
               loading ||
-              cart.length === 0 ||
-              receivedAmount === "" ||
-              Number(receivedAmount) < subtotal
+              cart.length === 0
             }
           >
             Complete & Print
@@ -388,7 +382,7 @@ const POSPage = () => {
         </div>
       </div>
 
-      {}
+      { }
       <div className={styles.printableBill}>
         <div className={styles.billHeader}>
           <h2>MERA STORE</h2>
@@ -418,8 +412,8 @@ const POSPage = () => {
         </table>
         <div className={styles.billFooter}>
           <strong>Total: Rs. {subtotal}</strong>
-          {}
-          {}
+          { }
+          { }
           <p>Thanks for visiting!</p>
         </div>
       </div>

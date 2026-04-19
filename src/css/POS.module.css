@@ -2,7 +2,7 @@
   gap: 20px;
   display: grid;
   padding: 20px;
-  min-height: calc(100vh - 40px);
+  /* min-height: calc(100vh - 40px); */
   grid-template-columns: 1fr 380px;
   background-color: var(--bg-color);
 }
@@ -324,42 +324,84 @@
   color: var(--success-color);
 }
 
+/* existing tablet */
 @media (max-width: 1024px) {
   .posContainer {
     grid-template-columns: 1fr;
   }
 }
 
+/* 🔥 MOBILE FIX (SAFE — desktop unaffected) */
 @media (max-width: 480px) {
+  .posContainer {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .cartTableWrapper {
+    overflow-x: hidden !important;
+    padding: 10px;
+  }
+
   .cartTable thead {
     display: none;
   }
+
   .cartTable tr {
-    padding: 10px;
     display: block;
-    margin-bottom: 15px;
+    padding: 12px;
+    margin-bottom: 12px;
     border-radius: 10px;
+    background: var(--bg-color);
     border: 1px solid var(--border-color);
   }
+
   .cartTable td {
-    border: none;
     display: flex;
-    padding: 8px 0;
     justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border: none;
+    font-size: 13px;
   }
+
   .cartTable td::before {
+    content: attr(data-label);
     font-weight: 600;
     color: var(--text-muted);
-    content: attr(data-label);
   }
+
+  .pName {
+    font-size: 14px;
+  }
+
+  .pSku {
+    font-size: 11px;
+  }
+
+  .qtyControl button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .qtyInput {
+    width: 42px;
+  }
+
+  .priceEditInputWrapper {
+    max-width: 100px;
+  }
+
+  .deleteBtn {
+    margin-left: auto;
+  }
+
   .rightSection {
-    margin-top: 20px;
-  }
-  .paymentCards {
-    grid-template-columns: repeat(3, 1fr);
+    margin-top: 15px;
   }
 }
 
+/* PRINT */
 .printableBill {
   display: none;
 }
