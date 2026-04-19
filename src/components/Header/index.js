@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "@/css/Header.module.css";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
@@ -62,6 +62,15 @@ const Header = ({ user }) => {
 
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  useEffect(() => {
+    const handleUpdateBadge = (event) => {
+      setBadgeCount(event.detail); // Low stock items ki counting set karega
+    };
+
+    window.addEventListener("updateCartBadge", handleUpdateBadge);
+    return () => window.removeEventListener("updateCartBadge", handleUpdateBadge);
+  }, []);
 
   return (
     <header className={styles.header}>
