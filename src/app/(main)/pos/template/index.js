@@ -114,6 +114,7 @@ const POSPage = () => {
         } else {
           showSnackbar({ message: "❌ Product not found", type: "error" });
           setSkuInput("");
+          handleGlobalLogout();
         }
       } catch (error) {
         if (error.response?.status === 403) {

@@ -109,7 +109,7 @@ const ProfitLossPage = () => {
         </div>
       </div>
 
-      { }
+      {}
       <div className={styles.statsGrid}>
         {statsCards.map((item, index) => (
           <StatsCard
@@ -151,7 +151,8 @@ const ProfitLossPage = () => {
                       {sale.totalDiscount}
                     </td>
                     <td data-label="Sold"> {sale.totalAmount}</td>
-                    <td data-label="Profit"
+                    <td
+                      data-label="Profit"
                       style={{
                         color: "var(--success-color)",
                         fontWeight: "bold",

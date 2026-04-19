@@ -1,5 +1,5 @@
-import PermissionWrapper from "@/components/PermissionWrapper";
 import HomePage from "./template";
+import PermissionWrapper from "@/components/PermissionWrapper";
 
 const Dashboard = () => {
   return (

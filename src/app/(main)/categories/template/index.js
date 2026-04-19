@@ -107,7 +107,14 @@ const CategoriesPage = () => {
       setEditId(null);
       loadCategories();
     } catch (error) {
-      showSnackbar({ message: handleAxiosError(error).message, type: "error" });
+      if (error.response?.status === 403) {
+        handleGlobalLogout();
+      } else {
+        console.error("Error loading categories:", error);
+        const { message } = handleAxiosError(error);
+        showSnackbar({ message, type: "error" });
+      }
+      // showSnackbar({ message: handleAxiosError(error).message, type: "error" });
     } finally {
       setLoading(false);
     }

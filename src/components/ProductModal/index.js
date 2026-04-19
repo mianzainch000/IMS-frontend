@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import { useState, useEffect } from "react";
 import styles from "@/css/Modal.module.css";
 import { useSnackbar } from "@/components/Snackbar";
+import { handleGlobalLogout } from "@/utils/autoLogout";
 import handleAxiosError from "@/components/HandleAxiosError";
 import { updateBellNotification } from "@/utils/updateBellNotification";
 
@@ -32,7 +33,13 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
         setFormData((prev) => ({ ...prev, category: res.data[0].name }));
       }
     } catch (error) {
-      console.error("Error loading categories:", error);
+      if (error.response?.status === 403) {
+        handleGlobalLogout();
+      } else {
+        console.error("Error loading categories:", error);
+        const { message } = handleAxiosError(error);
+        showAlert({ message, type: "error" });
+      }
     }
   };
 
@@ -86,8 +93,12 @@ const ProductModal = ({ isOpen, onClose, refreshData, productToEdit }) => {
         onClose();
       }
     } catch (error) {
-      const { message } = handleAxiosError(error);
-      showAlert({ message: message || "Something went wrong!", type: "error" });
+      if (error.response?.status === 403) {
+        handleGlobalLogout();
+      } else {
+        const { message } = handleAxiosError(error);
+        showAlert({ message, type: "error" });
+      }
     } finally {
       setLoading(false);
     }

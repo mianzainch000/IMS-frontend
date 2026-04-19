@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "@/css/Header.module.css";
+import PermissionWrapper from "../PermissionWrapper";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 const SearchIcon = () => (
@@ -74,48 +75,52 @@ const Header = ({ user }) => {
   }, []);
 
   return (
-    <header className={styles.header}>
-      {}
-      <div className={styles.leftSection}>
-        {shouldShowSearch ? (
-          <div className={styles.searchWrapper}>
-            <span className={styles.searchIcon}>
-              <SearchIcon />
-            </span>
-            <input
-              type="text"
-              placeholder="Search products, inventory..."
-              value={search}
-              onChange={handleSearch}
-              className={styles.searchInput}
-            />
-          </div>
-        ) : (
-          <div className={styles.pageTitle}>
-            {}
-            <h2> Overview</h2>
-          </div>
-        )}
-      </div>
-
-      {}
-      <div className={styles.actions}>
-        <div className={styles.notificationBell}>
-          <BellIcon />
-          {badgeCount > 0 && <span className={styles.badge}>{badgeCount}</span>}
+    <PermissionWrapper allowedRoles={["Admin", "Editor"]}>
+      <header className={styles.header}>
+        {}
+        <div className={styles.leftSection}>
+          {shouldShowSearch ? (
+            <div className={styles.searchWrapper}>
+              <span className={styles.searchIcon}>
+                <SearchIcon />
+              </span>
+              <input
+                type="text"
+                placeholder="Search products, inventory..."
+                value={search}
+                onChange={handleSearch}
+                className={styles.searchInput}
+              />
+            </div>
+          ) : (
+            <div className={styles.pageTitle}>
+              {}
+              <h2> Overview</h2>
+            </div>
+          )}
         </div>
 
-        <div className={styles.userProfile}>
-          <div className={styles.userInfo}>
-            <span className={styles.userName}>
-              {user?.name || "Zain Ishfaq"}
-            </span>
-            <span className={styles.userRole}>{user?.role || "Admin"}</span>
+        {}
+        <div className={styles.actions}>
+          <div className={styles.notificationBell}>
+            <BellIcon />
+            {badgeCount > 0 && (
+              <span className={styles.badge}>{badgeCount}</span>
+            )}
           </div>
-          <div className={styles.avatar}>{userInitial}</div>
+
+          <div className={styles.userProfile}>
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>
+                {user?.name || "Zain Ishfaq"}
+              </span>
+              <span className={styles.userRole}>{user?.role || "Admin"}</span>
+            </div>
+            <div className={styles.avatar}>{userInitial}</div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </PermissionWrapper>
   );
 };
 
