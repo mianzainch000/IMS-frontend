@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 import ReportFilter from "@/components/ReportFilter";
+import StatsCard from "@/components/Card";
 import { useSnackbar } from "@/components/Snackbar";
 import { handleGlobalLogout } from "@/utils/autoLogout";
 import styles from "@/css/ProfitLoss.module.css";
@@ -78,13 +79,15 @@ const ProfitLossPage = () => {
         </div>
       </div>
 
-      {/* Stats Grid and Table code remains same as your original snippet */}
+      {/* Stats Grid using the new StatsCard component */}
       <div className={styles.statsGrid}>
         {statsCards.map((item, index) => (
-          <div key={index} className={styles.card}>
-            <span className={styles.cardTitle}>{item.title}</span>
-            <h2 style={{ color: item.color }}>{item.value}</h2>
-          </div>
+          <StatsCard
+            key={index}
+            title={item.title}
+            value={item.value}
+            color={item.color}
+          />
         ))}
       </div>
 
