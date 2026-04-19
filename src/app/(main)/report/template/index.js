@@ -1,12 +1,12 @@
 "use client";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
-import ReportFilter from "@/components/ReportFilter";
 import StatsCard from "@/components/Card";
-import { useSnackbar } from "@/components/Snackbar";
-import { handleGlobalLogout } from "@/utils/autoLogout";
 import styles from "@/css/ProfitLoss.module.css";
+import React, { useState, useEffect } from "react";
+import { useSnackbar } from "@/components/Snackbar";
+import ReportFilter from "@/components/ReportFilter";
+import { handleGlobalLogout } from "@/utils/autoLogout";
 
 const ProfitLossPage = () => {
   const showSnackbar = useSnackbar();
@@ -40,17 +40,30 @@ const ProfitLossPage = () => {
 
   const totalProfit = data.stats.totalProfit || 0;
   const totalCost = data.stats.totalCost || 0;
-  const globalMargin = totalCost > 0 ? ((totalProfit / totalCost) * 100).toFixed(1) : 0;
+  const globalMargin =
+    totalCost > 0 ? ((totalProfit / totalCost) * 100).toFixed(1) : 0;
 
   const statsCards = [
-    { title: "Total Sales", value: `Rs. ${data.stats.totalSales || 0}`, color: "var(--primary-color)" },
+    {
+      title: "Total Sales",
+      value: `Rs. ${data.stats.totalSales || 0}`,
+      color: "var(--primary-color)",
+    },
     {
       title: viewMode === "amount" ? "Net Profit" : "Profit Margin",
       value: viewMode === "amount" ? `Rs. ${totalProfit}` : `${globalMargin}%`,
-      color: "var(--success-color)"
+      color: "var(--success-color)",
     },
-    { title: "Total Discount", value: `Rs. ${data.stats.totalDiscount || 0}`, color: "#f39c12" },
-    { title: "Loss (Damaged)", value: `Rs. ${data.stats.loss || 0}`, color: "var(--error-color)" },
+    {
+      title: "Total Discount",
+      value: `Rs. ${data.stats.totalDiscount || 0}`,
+      color: "#f39c12",
+    },
+    {
+      title: "Loss (Damaged)",
+      value: `Rs. ${data.stats.loss || 0}`,
+      color: "var(--error-color)",
+    },
   ];
 
   return (
@@ -67,19 +80,36 @@ const ProfitLossPage = () => {
 
         <div className={styles.topActions}>
           <div className={styles.toggleGroup}>
-            <button className={viewMode === "amount" ? styles.activeToggle : styles.toggleBtn} onClick={() => setViewMode("amount")}>Rs.</button>
-            <button className={viewMode === "percent" ? styles.activeToggle : styles.toggleBtn} onClick={() => setViewMode("percent")}>%</button>
+            <button
+              className={
+                viewMode === "amount" ? styles.activeToggle : styles.toggleBtn
+              }
+              onClick={() => setViewMode("amount")}
+            >
+              Rs.
+            </button>
+            <button
+              className={
+                viewMode === "percent" ? styles.activeToggle : styles.toggleBtn
+              }
+              onClick={() => setViewMode("percent")}
+            >
+              %
+            </button>
           </div>
           <br />
           <ReportFilter
-            filter={filter} setFilter={setFilter}
-            year={year} setYear={setYear}
-            month={month} setMonth={setMonth}
+            filter={filter}
+            setFilter={setFilter}
+            year={year}
+            setYear={setYear}
+            month={month}
+            setMonth={setMonth}
           />
         </div>
       </div>
 
-      {/* Stats Grid using the new StatsCard component */}
+      { }
       <div className={styles.statsGrid}>
         {statsCards.map((item, index) => (
           <StatsCard
@@ -108,22 +138,38 @@ const ProfitLossPage = () => {
             {data.recentSales.length > 0 ? (
               data.recentSales.map((sale, index) => {
                 const saleCost = sale.totalAmount - sale.totalProfit;
-                const saleMargin = saleCost > 0 ? ((sale.totalProfit / saleCost) * 100).toFixed(1) : 0;
+                const saleMargin =
+                  saleCost > 0
+                    ? ((sale.totalProfit / saleCost) * 100).toFixed(1)
+                    : 0;
                 return (
                   <tr key={index}>
-                    <td>{sale.date}</td>
-                    <td data-label="Products">{sale.productNames}</td>
+                    <td data-label="Date">{sale.date}</td>
+                    <td data-label="Prod">{sale.productNames}</td>
                     <td data-label="Qty"> {sale.totalQty} pcs </td>
-                    <td data-label="Discount" style={{ color: "#e67e22" }}>Rs. {sale.totalDiscount}</td>
-                    <td>Rs. {sale.totalAmount}</td>
-                    <td style={{ color: "var(--success-color)", fontWeight: "bold" }}>
-                      {viewMode === "amount" ? `+ Rs. ${sale.totalProfit}` : `+ ${saleMargin}%`}
+                    <td data-label="Dis" style={{ color: "#e67e22" }}>
+                      {sale.totalDiscount}
+                    </td>
+                    <td data-label="Sold"> {sale.totalAmount}</td>
+                    <td data-label="Profit"
+                      style={{
+                        color: "var(--success-color)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {viewMode === "amount"
+                        ? `${sale.totalProfit}`
+                        : `+ ${saleMargin}%`}
                     </td>
                   </tr>
                 );
               })
             ) : (
-              <tr><td colSpan="6" style={{ textAlign: "center" }}>No transactions found.</td></tr>
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>
+                  No transactions found.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

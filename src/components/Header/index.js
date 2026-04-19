@@ -65,16 +65,17 @@ const Header = ({ user }) => {
 
   useEffect(() => {
     const handleUpdateBadge = (event) => {
-      setBadgeCount(event.detail); // Low stock items ki counting set karega
+      setBadgeCount(event.detail);
     };
 
     window.addEventListener("updateCartBadge", handleUpdateBadge);
-    return () => window.removeEventListener("updateCartBadge", handleUpdateBadge);
+    return () =>
+      window.removeEventListener("updateCartBadge", handleUpdateBadge);
   }, []);
 
   return (
     <header className={styles.header}>
-      { }
+      {}
       <div className={styles.leftSection}>
         {shouldShowSearch ? (
           <div className={styles.searchWrapper}>
@@ -91,13 +92,13 @@ const Header = ({ user }) => {
           </div>
         ) : (
           <div className={styles.pageTitle}>
-            { }
+            {}
             <h2> Overview</h2>
           </div>
         )}
       </div>
 
-      { }
+      {}
       <div className={styles.actions}>
         <div className={styles.notificationBell}>
           <BellIcon />

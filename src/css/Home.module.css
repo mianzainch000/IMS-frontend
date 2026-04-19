@@ -80,14 +80,11 @@
   background-color: var(--error-color);
 }
 
-/* Layout Grid ko rakha gaya hai kyunki ye cards ki positioning control karta hai */
 .statsGrid {
   gap: 16px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
-
-/* --- Card ki purani internal CSS yahan se remove kar di gayi hai --- */
 
 .recentSection {
   padding: 20px;

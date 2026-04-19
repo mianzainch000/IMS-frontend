@@ -1,59 +1,58 @@
 .filterContainer {
-  display: flex;
-  flex-direction: column;
   gap: 12px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .buttonRow {
-  display: flex;
   gap: 8px;
+  display: flex;
   flex-wrap: wrap;
 }
 
 .filterBtn {
-  flex: 1; /* Mobile par barabar space lengay */
+  flex: 1;
   min-width: 70px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
   padding: 10px 5px;
-  border: 1px solid var(--border-color);
   background: white;
   color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: var(--radius);
   transition: all 0.2s ease;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
 }
 
 .activeBtn {
-  background: var(--primary-color) !important;
   color: white !important;
+  background: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
 }
 
 .dropdownRow {
-  display: flex;
   gap: 10px;
   width: 100%;
+  display: flex;
 }
 
 .selectInput {
   flex: 1;
   padding: 10px;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  background: white;
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  background: white;
-  font-size: 14px;
-  outline: none;
-  cursor: pointer;
 }
 
-/* Desktop View (Jab screen bari ho) */
 @media (min-width: 768px) {
   .filterContainer {
-    flex-direction: row; /* Desktop par ek hi line mein */
-    align-items: center;
     width: auto;
+    flex-direction: row;
+    align-items: center;
   }
 
   .buttonRow {

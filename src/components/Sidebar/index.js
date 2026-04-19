@@ -198,7 +198,7 @@ const Sidebar = () => {
             className={styles.logoutBtn}
             onClick={() => setIsModalOpen(true)}
           >
-            { }
+            {}
             <span className={styles.icon}>
               <Icons.Logout />
             </span>
@@ -207,7 +207,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      { }
+      {}
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

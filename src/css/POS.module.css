@@ -2,7 +2,6 @@
   gap: 20px;
   display: grid;
   padding: 20px;
-  /* min-height: calc(100vh - 40px); */
   grid-template-columns: 1fr 380px;
   background-color: var(--bg-color);
 }
@@ -324,23 +323,21 @@
   color: var(--success-color);
 }
 
-/* existing tablet */
 @media (max-width: 1024px) {
   .posContainer {
     grid-template-columns: 1fr;
   }
 }
 
-/* 🔥 MOBILE FIX (SAFE — desktop unaffected) */
 @media (max-width: 480px) {
   .posContainer {
-    padding: 10px;
     gap: 10px;
+    padding: 10px;
   }
 
   .cartTableWrapper {
-    overflow-x: hidden !important;
     padding: 10px;
+    overflow-x: hidden !important;
   }
 
   .cartTable thead {
@@ -348,8 +345,8 @@
   }
 
   .cartTable tr {
-    display: block;
     padding: 12px;
+    display: block;
     margin-bottom: 12px;
     border-radius: 10px;
     background: var(--bg-color);
@@ -357,18 +354,18 @@
   }
 
   .cartTable td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
     border: none;
+    display: flex;
+    padding: 6px 0;
     font-size: 13px;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .cartTable td::before {
-    content: attr(data-label);
     font-weight: 600;
     color: var(--text-muted);
+    content: attr(data-label);
   }
 
   .pName {
@@ -401,7 +398,6 @@
   }
 }
 
-/* PRINT */
 .printableBill {
   display: none;
 }
