@@ -12,3 +12,7 @@ const Categories = () => {
   );
 };
 export default Categories;
+
+export function generateMetadata() {
+  return { title: "Categories" };
+}

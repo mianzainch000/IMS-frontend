@@ -2,13 +2,13 @@
 import axios from "axios";
 import Loader from "@/components/Loader";
 import StatsCard from "@/components/Card";
-import styles from "@/css/ProfitLoss.module.css";
+import styles from "@/css/Report.module.css";
 import React, { useState, useEffect } from "react";
 import { useSnackbar } from "@/components/Snackbar";
 import ReportFilter from "@/components/ReportFilter";
 import { handleGlobalLogout } from "@/utils/autoLogout";
 
-const ProfitLossPage = () => {
+const ReportPage = () => {
   const showSnackbar = useSnackbar();
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -180,4 +180,4 @@ const ProfitLossPage = () => {
   );
 };
 
-export default ProfitLossPage;
+export default ReportPage;

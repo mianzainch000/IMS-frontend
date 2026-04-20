@@ -1,5 +1,5 @@
 import React from "react";
-import ProfitLossPage from "./template";
+import ReportPagePage from "./template";
 import PermissionWrapper from "@/components/PermissionWrapper";
 
 const Report = () => {
@@ -8,9 +8,13 @@ const Report = () => {
       allowedRoles={["Admin"]}
       fallback={<p className="accessDenied">Only Admin Access</p>}
     >
-      <ProfitLossPage />
+      <ReportPagePage />
     </PermissionWrapper>
   );
 };
 
 export default Report;
+
+export function generateMetadata() {
+  return { title: "Report" };
+}

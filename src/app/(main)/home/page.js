@@ -5,3 +5,7 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+export function generateMetadata() {
+  return { title: "Home" };
+}

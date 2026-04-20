@@ -13,3 +13,7 @@ const Pos = () => {
 };
 
 export default Pos;
+
+export function generateMetadata() {
+  return { title: "POS" };
+}

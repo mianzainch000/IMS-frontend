@@ -71,10 +71,20 @@ const UsersPage = () => {
   }, [users, searchQuery]);
 
   const updateUserDetail = async (id, payload) => {
+    const primaryAdmin = users[users.length - 1];
+
+    if (primaryAdmin && primaryAdmin._id === id) {
+      showSnackbar({
+        message: "Primary administrator's role/status is protected.",
+        type: "error",
+      });
+      return;
+    }
+
     setLoading(true);
+
     try {
       const res = await axios.put(`/users/api/${id}`, payload);
-
       if (res.status === 200) {
         showSnackbar({
           message: res.data?.message || "Updated successfully!",

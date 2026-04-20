@@ -13,3 +13,7 @@ const User = () => {
 };
 
 export default User;
+
+export function generateMetadata() {
+  return { title: "Users" };
+}

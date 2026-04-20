@@ -13,3 +13,7 @@ const PrdocutPage = () => {
 };
 
 export default PrdocutPage;
+
+export function generateMetadata() {
+  return { title: "Products" };
+}
