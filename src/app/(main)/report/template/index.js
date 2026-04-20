@@ -105,6 +105,7 @@ const ProfitLossPage = () => {
             setYear={setYear}
             month={month}
             setMonth={setMonth}
+            data={data}
           />
         </div>
       </div>

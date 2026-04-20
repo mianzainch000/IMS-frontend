@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "@/css/ReportFilter.module.css";
+import { useSnackbar } from "@/components/Snackbar";
+import { exportAnalyticsToPDF } from "@/components/ExportPDF";
 
 const ReportFilter = ({
   filter,
@@ -8,6 +10,7 @@ const ReportFilter = ({
   setYear,
   month,
   setMonth,
+  data,
 }) => {
   const startYear = 2026;
   const currentYear = new Date().getFullYear();
@@ -31,9 +34,27 @@ const ReportFilter = ({
     { val: "12", label: "December" },
   ];
 
+  const showSnackbar = useSnackbar();
+
+  const handleInternalExport = () => {
+    if (!data || !data.recentSales || data.recentSales.length === 0) {
+      showSnackbar({
+        message: "No data available to export",
+        type: "error",
+      });
+      return;
+    }
+
+    let title = filter.toUpperCase();
+    if (filter === "custom") {
+      title = month === "all" ? `YEAR-${year}` : `MONTH-${month}-${year}`;
+    }
+
+    exportAnalyticsToPDF(data, title);
+  };
+
   return (
     <div className={styles.filterContainer}>
-      {}
       <div className={styles.buttonRow}>
         {["day", "week", "all", "custom"].map((f) => (
           <button
@@ -44,9 +65,16 @@ const ReportFilter = ({
             {f === "custom" ? "HISTORY" : f.toUpperCase()}
           </button>
         ))}
+
+        <button
+          className={styles.exportBtn}
+          onClick={handleInternalExport}
+          title="Download PDF"
+        >
+          PDF
+        </button>
       </div>
 
-      {}
       {filter === "custom" && (
         <div className={styles.dropdownRow}>
           <select
