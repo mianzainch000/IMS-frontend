@@ -1,0 +1,164 @@
+.container {
+  gap: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pageHeader {
+  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pageHeader h1 {
+  font-size: 24px;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+
+.pageHeader p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.addBtn {
+  gap: 8px;
+  color: white;
+  border: none;
+  display: flex;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  align-items: center;
+  transition: opacity 0.2s;
+  background-color: var(--primary-color);
+}
+
+.addBtn:hover {
+  opacity: 0.9;
+}
+
+.tableCard {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 16px;
+  font-size: 13px;
+  text-align: left;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table td {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.productCell {
+  font-weight: 600;
+}
+
+.catBadge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--bg-color);
+}
+
+.lowStock {
+  font-weight: 700;
+  color: var(--error-color);
+}
+
+.actionGroup {
+  gap: 10px;
+  display: flex;
+}
+
+.editBtn,
+.deleteBtn {
+  padding: 6px;
+  display: flex;
+  cursor: pointer;
+  background: none;
+  border-radius: 6px;
+  align-items: center;
+  transition: all 0.2s;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.editBtn:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.deleteBtn:hover {
+  color: var(--error-color);
+  border-color: var(--error-color);
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .addBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table {
+    min-width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    padding: 12px;
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+  }
+
+  .table td {
+    border: none;
+    display: flex;
+    padding: 8px 0;
+    font-size: 13px;
+    justify-content: space-between;
+  }
+
+  .table td::before {
+    font-weight: 600;
+    color: var(--text-muted);
+    content: attr(data-label);
+  }
+
+  .actionGroup {
+    justify-content: flex-end;
+  }
+}
