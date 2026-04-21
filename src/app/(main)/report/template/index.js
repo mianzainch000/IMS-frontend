@@ -3,6 +3,7 @@ import axios from "axios";
 import Loader from "@/components/Loader";
 import StatsCard from "@/components/Card";
 import styles from "@/css/Report.module.css";
+import { useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useSnackbar } from "@/components/Snackbar";
 import ReportFilter from "@/components/ReportFilter";
@@ -10,6 +11,8 @@ import { handleGlobalLogout } from "@/utils/autoLogout";
 
 const ReportPage = () => {
   const showSnackbar = useSnackbar();
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("q") || "";
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -20,7 +23,7 @@ const ReportPage = () => {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const query = `filter=${filter}&year=${year}&month=${month}`;
+      const query = `filter=${filter}&year=${year}&month=${month}&search=${searchQuery}`;
       const res = await axios.get(`/report/api?${query}`);
       setData(res.data);
     } catch (error) {
@@ -34,9 +37,77 @@ const ReportPage = () => {
     }
   };
 
+  const handleReturn = async (saleId, items) => {
+    if (!items || items.length === 0) {
+      showSnackbar({
+        message: "No products found in this sale!",
+        type: "error",
+      });
+      return;
+    }
+
+    const itemId = items[0]?._id;
+    const maxQty = items[0]?.quantity || 0;
+
+    if (maxQty <= 0) {
+      showSnackbar({
+        message: "This product has already been fully returned!",
+        type: "error",
+      });
+      return;
+    }
+
+    const qty = prompt(
+      `How much quantity do you want to return? (Max: ${maxQty})`,
+    );
+
+    if (qty === null) return;
+    const returnQty = parseInt(qty);
+
+    if (isNaN(returnQty) || returnQty <= 0) {
+      showSnackbar({
+        message: "Please enter a valid quantity!",
+        type: "error",
+      });
+      return;
+    }
+
+    if (returnQty > maxQty) {
+      showSnackbar({
+        message: `You can only return up to ${maxQty} units!`,
+        type: "error",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.post("/report/api", {
+        saleId: saleId,
+        itemId: itemId,
+        returnQuantity: returnQty,
+      });
+
+      if (res.status === 201) {
+        showSnackbar({
+          message:
+            res.data.message || "Sale returned and stock updated successfully!",
+          type: "success",
+        });
+      }
+
+      await fetchAnalytics();
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Return process failed";
+      showSnackbar({ message: errorMsg, type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchAnalytics();
-  }, [filter, year, month]);
+  }, [filter, year, month, searchQuery]);
 
   const totalProfit = data.stats.totalProfit || 0;
   const totalCost = data.stats.totalCost || 0;
@@ -132,6 +203,8 @@ const ReportPage = () => {
               <th>Qty</th>
               <th>Discount</th>
               <th>Total Sold</th>
+              <th>Action</th>
+
               <th>{viewMode === "amount" ? "Profit (Rs)" : "Margin (%)"}</th>
             </tr>
           </thead>
@@ -162,6 +235,21 @@ const ReportPage = () => {
                       {viewMode === "amount"
                         ? `${sale.totalProfit}`
                         : `+ ${saleMargin}%`}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => handleReturn(sale._id, sale.items)}
+                        style={{
+                          background: "var(--error-color)",
+                          color: "white",
+                          border: "none",
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Return
+                      </button>
                     </td>
                   </tr>
                 );

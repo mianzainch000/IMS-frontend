@@ -18,4 +18,5 @@ export const apiConfig = {
   scanProduct: "scan",
   checkout: "checkout",
   getReports: "analytics",
+  returnSale: "return",
 };
