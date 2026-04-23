@@ -1,0 +1,206 @@
+.dashboardContainer {
+  gap: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcomeSection h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.welcomeSection p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.notificationArea {
+  padding: 16px;
+  margin-bottom: 24px;
+  border-radius: var(--radius);
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-left: 4px solid var(--error-color);
+}
+
+.alertHeader {
+  gap: 8px;
+  display: flex;
+  font-size: 15px;
+  font-weight: 700;
+  align-items: center;
+  margin-bottom: 12px;
+  color: var(--error-color);
+}
+
+.alertList {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.alertItem {
+  gap: 10px;
+  display: flex;
+  padding: 10px 14px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.alertText {
+  flex: 1;
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--text-main);
+  text-overflow: ellipsis;
+}
+
+.alertText span {
+  font-weight: 700;
+  margin-left: 4px;
+  color: var(--error-color);
+}
+
+.restockBtn {
+  color: white;
+  font-size: 11px;
+  min-width: 70px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  background-color: var(--error-color);
+}
+
+.statsGrid {
+  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.recentSection {
+  padding: 20px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}
+
+.viewAllBtn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  text-decoration: none;
+  color: var(--primary-color);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--primary-color);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th {
+  padding: 12px;
+  font-size: 12px;
+  text-align: left;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+}
+.table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.statusBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.inStock {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+.lowStock {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+.outOfStock {
+  color: var(--error-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.mobileText {
+  display: none;
+}
+.desktopText {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .mobileText {
+    display: inline;
+  }
+  .desktopText {
+    display: none;
+  }
+
+  .table thead {
+    display: none;
+  }
+  .table tr {
+    padding: 10px;
+    display: block;
+    margin-bottom: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+  }
+  .table td {
+    display: flex;
+    padding: 8px 0;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bg-color);
+  }
+  .table td:last-child {
+    border-bottom: none;
+  }
+  .table td::before {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    content: attr(data-label);
+  }
+  .productName {
+    max-width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+  }
+  .restockBtn {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .alertItem {
+    flex-direction: column;
+    justify-content: center;
+  }
+}

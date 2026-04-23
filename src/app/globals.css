@@ -1,0 +1,144 @@
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-color: #f3f4f6;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --error-color: #ef4444;
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --success-bg: #ecfdf5;
+  --success-border: #d1fae5;
+  --radius: 8px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  line-height: 1.5;
+  color: var(--text-main);
+  background-color: var(--bg-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.accessDenied {
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 50px;
+  font-weight: bold;
+  color: var(--error-color);
+}
+
+/* ================= PRINT BILL ================= */
+
+.printableBill {
+  display: none;
+}
+
+@media print {
+  /* Hide everything except bill */
+  body * {
+    visibility: hidden;
+  }
+
+  .printableBill,
+  .printableBill * {
+    visibility: visible;
+  }
+
+  .printableBill {
+    top: 0;
+    left: 50%;
+    width: 80mm;
+    color: #000;
+    padding: 5mm;
+    background: #fff;
+    position: absolute;
+    font-family: monospace;
+    display: block !important;
+    transform: translateX(-50%);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ================= HEADER ================= */
+  .billHeader {
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #000;
+  }
+
+  .billHeader h2 {
+    font-size: 16px;
+    margin-bottom: 3px;
+  }
+
+  .billHeader p {
+    font-size: 12px;
+  }
+
+  /* ================= TABLE ================= */
+  .billTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+
+  .billTable th,
+  .billTable td {
+    font-size: 12px;
+    padding: 6px 6px;
+    text-align: left;
+  }
+
+  /* ================= VERTICAL LINES ================= */
+  .billTable th,
+  .billTable td {
+    border-right: 1px dashed #000;
+  }
+
+  .billTable th:last-child,
+  .billTable td:last-child {
+    border-right: none;
+  }
+
+  /* ================= COLUMN ALIGNMENT ================= */
+  .billTable th:nth-child(1),
+  .billTable td:nth-child(1) {
+    width: 50%;
+    text-align: left;
+    word-break: break-word;
+  }
+
+  .billTable th:nth-child(2),
+  .billTable td:nth-child(2) {
+    width: 20%;
+    text-align: center;
+  }
+
+  .billTable th:nth-child(3),
+  .billTable td:nth-child(3) {
+    width: 30%;
+    text-align: right;
+  }
+
+  /* ================= FOOTER ================= */
+  .billFooter {
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #000;
+  }
+
+  .billFooter strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+}

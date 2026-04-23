@@ -1,0 +1,40 @@
+.card {
+  gap: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 12px;
+  justify-content: center;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}

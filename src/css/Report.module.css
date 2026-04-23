@@ -1,0 +1,140 @@
+.container {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.header {
+  gap: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 25px;
+  justify-content: space-between;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--text-main);
+}
+
+.controlsArea {
+  gap: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toggleGroup {
+  padding: 4px;
+  display: flex;
+  background: #f1f5f9;
+  border-radius: var(--radius);
+}
+
+.toggleBtn {
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 15px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.activeToggle {
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 15px;
+  background: white;
+  border-radius: 6px;
+  color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statsGrid {
+  gap: 20px;
+  display: grid;
+  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.tableWrapper {
+  padding: 20px;
+  overflow-x: auto;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.pTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pTable th {
+  padding: 15px;
+  font-size: 13px;
+  text-align: left;
+  background: #f9fafb;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.pTable td {
+  padding: 15px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .controlsArea {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pTable thead {
+    display: none;
+  }
+  .pTable tr {
+    padding: 10px;
+    display: block;
+    margin-bottom: 15px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+  }
+  .pTable td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .pTable td::before {
+    left: 10px;
+    font-weight: 600;
+    position: absolute;
+    color: var(--text-muted);
+    content: attr(data-label);
+  }
+}
