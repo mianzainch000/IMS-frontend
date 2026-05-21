@@ -19,4 +19,8 @@ export const apiConfig = {
   checkout: "checkout",
   getReports: "analytics",
   returnSale: "return",
+  getExpenseCategory: "getCategories",
+  addExpenseCategory: "addCategories",
+  updateExpenseCategory: "updateCategories",
+  deleteExpenseCategory: "deleteCategories",
 };

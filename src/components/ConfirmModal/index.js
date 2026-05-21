@@ -14,7 +14,7 @@ const ConfirmModal = ({
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {}
+        { }
         <button
           className={styles.closeBtn}
           onClick={onClose}
@@ -44,7 +44,7 @@ const ConfirmModal = ({
         </div>
 
         <div className={styles.footer}>
-          {}
+          { }
           <button
             className={`${styles.btn} ${styles.cancelBtn}`}
             onClick={onClose}

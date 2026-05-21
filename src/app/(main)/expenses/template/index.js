@@ -1,30 +1,38 @@
 "use client";
-import React, { useState } from "react";
+import axios from "axios";
+import Loader from "@/components/Loader";
+import { useState, useEffect } from "react";
 import styles from "@/css/expenses.module.css";
+import { useSnackbar } from "@/components/Snackbar";
+import ConfirmModal from "@/components/ConfirmModal";
+import { handleGlobalLogout } from "@/utils/autoLogout";
+import handleAxiosError from "@/components/HandleAxiosError";
+import PermissionWrapper from "@/components/PermissionWrapper";
 
 export default function ExpensesPage() {
+    const showSnackbar = useSnackbar();
     const [activeTab, setActiveTab] = useState("expenses");
+    const [loading, setLoading] = useState(false);
+
+    // --- MODAL STATES ---
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: () => { },
+    });
 
     // --- STATIC BUSINESS METRICS ---
-    const [businessData, setBusinessData] = useState({
+    const [businessData] = useState({
         totalSales: 250000,
         productCost: 110000,
     });
 
-    // --- STATIC STORAGE STATES ---
-    const [expenses, setExpenses] = useState([
-        { _id: "1", title: "Bijli ka Bill", amount: 12000, category: "Bill", date: "2026-05-15", description: "April month utility bill" },
-        { _id: "2", title: "Dukaan ka Rent", amount: 35000, category: "Rent", date: "2026-05-01", description: "Main market shop advanced rent" },
-        { _id: "3", title: "Internet Charges", amount: 3000, category: "Bill", date: "2026-05-10", description: "Office Wi-Fi" },
-    ]);
+    // --- EXPENSES STORAGE STATE (CLEAN & EMPTY BY DEFAULT) ---
+    const [expenses, setExpenses] = useState([]); // <-- Remomved all default dummy objects
 
-    const [categories, setCategories] = useState([
-        { _id: "c1", name: "Rent", isDefault: true },
-        { _id: "c2", name: "Bill", isDefault: true },
-        { _id: "c3", name: "Salaries", isDefault: true },
-        { _id: "c4", name: "Stock Purchase", isDefault: true },
-        { _id: "c5", name: "Others", isDefault: true },
-    ]);
+    // --- DYNAMIC CATEGORIES VIA AXIOS ---
+    const [categories, setCategories] = useState([]);
 
     // Form states
     const [expenseForm, setExpenseForm] = useState({ title: "", amount: "", category: "", date: "", description: "" });
@@ -33,7 +41,35 @@ export default function ExpensesPage() {
     const [editingExpenseId, setEditingExpenseId] = useState(null);
     const [editingCategoryId, setEditingCategoryId] = useState(null);
 
-    // --- FINANCIAL LOGIC ---
+    // ==========================================
+    // AXIOS: LOAD CATEGORIES ROUTINE
+    // ==========================================
+    const loadCategories = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get("/expenses/category");
+            if (res.data?.success) {
+                setCategories(res.data.data || []);
+            } else {
+                setCategories(res.data || []);
+            }
+        } catch (error) {
+            if (error.response?.status === 403) {
+                handleGlobalLogout();
+            } else {
+                const { message } = handleAxiosError(error);
+                showSnackbar({ message, type: "error" });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadCategories();
+    }, []);
+
+    // --- FINANCIAL CALCULATIONS ---
     const totalSales = businessData.totalSales;
     const totalCostOfGoods = businessData.productCost;
     const grossProfit = totalSales - totalCostOfGoods;
@@ -41,7 +77,7 @@ export default function ExpensesPage() {
     const netProfit = grossProfit - totalExpenses;
     const isProfit = netProfit >= 0;
 
-    // --- ACTIONS ---
+    // --- EXPENSE HANDLERS ---
     const handleExpenseInputChange = (e) => {
         setExpenseForm({ ...expenseForm, [e.target.name]: e.target.value });
     };
@@ -49,7 +85,7 @@ export default function ExpensesPage() {
     const handleExpenseSubmit = (e) => {
         e.preventDefault();
         if (!expenseForm.title || !expenseForm.amount || !expenseForm.category || !expenseForm.date) {
-            alert("Kindly fill all required fields!");
+            showSnackbar({ message: "Kindly fill all required fields!", type: "error" });
             return;
         }
 
@@ -63,22 +99,96 @@ export default function ExpensesPage() {
         setExpenseForm({ title: "", amount: "", category: "", date: "", description: "" });
     };
 
-    const handleCategorySubmit = (e) => {
+    // Trigger Custom Modal for Expense Delete
+    const triggerExpenseDelete = (id) => {
+        setModalConfig({
+            isOpen: true,
+            title: "Delete Expense",
+            message: "Are you sure you want to delete this expense log entry?",
+            onConfirm: () => {
+                setExpenses(expenses.filter(e => e._id !== id));
+                showSnackbar({ message: "Expense entry deleted!", type: "success" });
+            }
+        });
+    };
+
+    // ==========================================
+    // AXIOS: CATEGORY OPERATIONS HANDLERS
+    // ==========================================
+    const handleCategorySubmit = async (e) => {
         e.preventDefault();
         if (!categoryForm.name.trim()) return;
 
-        if (editingCategoryId) {
-            setCategories(categories.map(cat => cat._id === editingCategoryId ? { ...cat, name: categoryForm.name.trim() } : cat));
-            setEditingCategoryId(null);
-        } else {
-            const newCat = { _id: Date.now().toString(), name: categoryForm.name.trim(), isDefault: false };
-            setCategories([...categories, newCat]);
+        setLoading(true);
+        try {
+            if (editingCategoryId) {
+                const res = await axios.put(`/expenses/category/${editingCategoryId}`, {
+                    name: categoryForm.name.trim()
+                });
+                if (res.status === 200) {
+                    showSnackbar({ message: res.data.message || "Category updated!", type: "success" });
+                    setEditingCategoryId(null);
+                    loadCategories();
+                }
+            } else {
+                const res = await axios.post("/expenses/category", {
+                    name: categoryForm.name.trim()
+                });
+                if (res.status === 201 || res.status === 200) {
+                    showSnackbar({ message: res.data.message || "Category added!", type: "success" });
+                    loadCategories();
+                }
+            }
+            setCategoryForm({ name: "" });
+        } catch (error) {
+            const { message } = handleAxiosError(error);
+            showSnackbar({ message, type: "error" });
+        } finally {
+            setLoading(false);
         }
-        setCategoryForm({ name: "" });
+    };
+
+    // Trigger Custom Modal for Category Delete
+    const triggerCategoryDelete = (cat) => {
+        setModalConfig({
+            isOpen: true,
+            title: "Delete Category",
+            message: `Are you sure you want to permanently delete "${cat.name}"?`,
+            onConfirm: async () => {
+                setLoading(true);
+                try {
+                    const res = await axios.delete(`/expenses/category/${cat._id}`);
+                    if (res.status === 200) {
+                        showSnackbar({ message: res.data.message || "Category deleted!", type: "success" });
+                        loadCategories();
+                    }
+                } catch (error) {
+                    const { message } = handleAxiosError(error);
+                    showSnackbar({ message, type: "error" });
+                } finally {
+                    setLoading(false);
+                }
+            }
+        });
+    };
+
+    const closeConfirmModal = () => {
+        setModalConfig(prev => ({ ...prev, isOpen: false }));
     };
 
     return (
         <div className={styles.container}>
+            {loading && <Loader />}
+
+            {/* Global Confirm Modal */}
+            <ConfirmModal
+                isOpen={modalConfig.isOpen}
+                onClose={closeConfirmModal}
+                onConfirm={modalConfig.onConfirm}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                type="danger"
+            />
 
             {/* ================= PREMIUM FINANCIAL SUMMARY PANEL ================= */}
             <div className={styles.statsGrid}>
@@ -216,7 +326,7 @@ export default function ExpensesPage() {
                                                 <td>
                                                     <div className={styles.actionsCell}>
                                                         <button className={styles.btnEdit} onClick={() => { setEditingExpenseId(exp._id); setExpenseForm(exp); }}>Edit</button>
-                                                        <button className={styles.btnDelete} onClick={() => { if (confirm("Delete entry?")) setExpenses(expenses.filter(e => e._id !== exp._id)) }}>Delete</button>
+                                                        <button className={styles.btnDelete} onClick={() => triggerExpenseDelete(exp._id)}>Delete</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -247,7 +357,7 @@ export default function ExpensesPage() {
                                             <span className={styles.mobileCardDate}>📅 {exp.date}</span>
                                             <div className={styles.actionsCell}>
                                                 <button className={styles.btnEdit} onClick={() => { setEditingExpenseId(exp._id); setExpenseForm(exp); }}>Edit</button>
-                                                <button className={styles.btnDelete} onClick={() => { if (confirm("Delete entry?")) setExpenses(expenses.filter(e => e._id !== exp._id)) }}>Delete</button>
+                                                <button className={styles.btnDelete} onClick={() => triggerExpenseDelete(exp._id)}>Delete</button>
                                             </div>
                                         </div>
                                     </div>
@@ -262,23 +372,25 @@ export default function ExpensesPage() {
             {/* ================= TAB 2: CATEGORIES GRID ================= */}
             {activeTab === "categories" && (
                 <div className={styles.categoryGrid}>
-                    <div className={styles.card}>
-                        <h3 className={styles.cardTitle}>{editingCategoryId ? "Edit Category Name" : "Create Custom Category"}</h3>
-                        <form onSubmit={handleCategorySubmit}>
-                            <div className={styles.formGroup}>
-                                <label>Category Name *</label>
-                                <input type="text" value={categoryForm.name} onChange={(e) => setCategoryForm({ name: e.target.value })} placeholder="e.g., Refreshment" className={styles.inputField} required />
-                            </div>
-                            <button type="submit" className={styles.btnPrimary}>
-                                {editingCategoryId ? "Rename Scope" : "Add Category"}
-                            </button>
-                            {editingCategoryId && (
-                                <button type="button" className={styles.btnCancel} onClick={() => { setEditingCategoryId(null); setCategoryForm({ name: "" }); }}>
-                                    Cancel
+                    <PermissionWrapper allowedRoles={["Admin", "Editor"]}>
+                        <div className={styles.card}>
+                            <h3 className={styles.cardTitle}>{editingCategoryId ? "Edit Category Name" : "Create Custom Category"}</h3>
+                            <form onSubmit={handleCategorySubmit}>
+                                <div className={styles.formGroup}>
+                                    <label>Category Name *</label>
+                                    <input type="text" value={categoryForm.name} onChange={(e) => setCategoryForm({ name: e.target.value })} placeholder="e.g., Refreshment" className={styles.inputField} required />
+                                </div>
+                                <button type="submit" className={styles.btnPrimary}>
+                                    {editingCategoryId ? "Rename Scope" : "Add Category"}
                                 </button>
-                            )}
-                        </form>
-                    </div>
+                                {editingCategoryId && (
+                                    <button type="button" className={styles.btnCancel} onClick={() => { setEditingCategoryId(null); setCategoryForm({ name: "" }); }}>
+                                        Cancel
+                                    </button>
+                                )}
+                            </form>
+                        </div>
+                    </PermissionWrapper>
 
                     <div className={styles.tableContainer}>
                         <div className={styles.tableHeader}>
@@ -291,8 +403,7 @@ export default function ExpensesPage() {
                                 <thead>
                                     <tr>
                                         <th>Category Title</th>
-                                        <th>Type Scope</th>
-                                        <th>Permissions</th>
+                                        <th>Permissions Control</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -300,18 +411,15 @@ export default function ExpensesPage() {
                                         <tr key={cat._id}>
                                             <td style={{ fontWeight: "500" }}>{cat.name}</td>
                                             <td>
-                                                {cat.isDefault ? (
-                                                    <span className={`${styles.badge} ${styles.badgeDefault}`}>System Core</span>
-                                                ) : (
-                                                    <span className={styles.badge}>Custom Scope</span>
-                                                )}
-                                            </td>
-                                            <td>
                                                 <div className={styles.actionsCell}>
-                                                    <button className={styles.btnEdit} onClick={() => { setEditingCategoryId(cat._id); setCategoryForm({ name: cat.name }); }}>Rename</button>
-                                                    <button className={styles.btnDelete} disabled={cat.isDefault} onClick={() => { if (confirm("Delete?")) setCategories(categories.filter(c => c._id !== cat._id)) }}>
-                                                        Delete
-                                                    </button>
+                                                    <PermissionWrapper allowedRoles={["Admin", "Editor"]}>
+                                                        <button className={styles.btnEdit} onClick={() => { setEditingCategoryId(cat._id); setCategoryForm({ name: cat.name }); }}>Rename</button>
+                                                    </PermissionWrapper>
+                                                    <PermissionWrapper allowedRoles={["Admin"]}>
+                                                        <button className={styles.btnDelete} onClick={() => triggerCategoryDelete(cat)}>
+                                                            Delete
+                                                        </button>
+                                                    </PermissionWrapper>
                                                 </div>
                                             </td>
                                         </tr>
@@ -326,19 +434,18 @@ export default function ExpensesPage() {
                                 <div key={cat._id} className={styles.mobileDataCard}>
                                     <div className={styles.mobileCardHeader}>
                                         <div className={styles.mobileCardTitle}>{cat.name}</div>
-                                        {cat.isDefault ? (
-                                            <span className={`${styles.badge} ${styles.badgeDefault}`}>System Core</span>
-                                        ) : (
-                                            <span className={styles.badge}>Custom Scope</span>
-                                        )}
                                     </div>
                                     <div className={styles.mobileCardFooter} style={{ marginTop: "12px", paddingTop: "8px" }}>
                                         <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>Permissions Control</span>
                                         <div className={styles.actionsCell}>
-                                            <button className={styles.btnEdit} onClick={() => { setEditingCategoryId(cat._id); setCategoryForm({ name: cat.name }); }}>Rename</button>
-                                            <button className={styles.btnDelete} disabled={cat.isDefault} onClick={() => { if (confirm("Delete?")) setCategories(categories.filter(c => c._id !== cat._id)) }}>
-                                                Delete
-                                            </button>
+                                            <PermissionWrapper allowedRoles={["Admin", "Editor"]}>
+                                                <button className={styles.btnEdit} onClick={() => { setEditingCategoryId(cat._id); setCategoryForm({ name: cat.name }); }}>Rename</button>
+                                            </PermissionWrapper>
+                                            <PermissionWrapper allowedRoles={["Admin"]}>
+                                                <button className={styles.btnDelete} onClick={() => triggerCategoryDelete(cat)}>
+                                                    Delete
+                                                </button>
+                                            </PermissionWrapper>
                                         </div>
                                     </div>
                                 </div>
